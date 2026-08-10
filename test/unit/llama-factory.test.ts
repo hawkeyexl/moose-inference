@@ -127,6 +127,9 @@ describe("asynchronous resolution", () => {
 
   it("maps a tier keyword without consulting the machine", async () => {
     // No native binding needed: a named tier is a catalog lookup.
+    // Asserted through `aliasForTier` rather than a literal alias so retiering
+    // the catalog does not have to edit this test — what is under test is that
+    // a tier keyword resolves at all, not which model currently backs it.
     expect(
       (
         await resolveProviderIdentityAsync({
@@ -134,7 +137,7 @@ describe("asynchronous resolution", () => {
           model: "quality",
         })
       ).model,
-    ).toBe("gemma-4-12b");
+    ).toBe(aliasForTier("quality"));
   });
 
   it("passes a concrete model straight through", async () => {

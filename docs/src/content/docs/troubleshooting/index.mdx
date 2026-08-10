@@ -39,9 +39,9 @@ Everything else follows. If you have a message in hand, go straight to the
 [operational]
  1. InferenceError: Anthropic provider needs NOT_SET_XYZ set (or choose another provider)
  2. InferenceError: No provider specified. Detecting one probes the environment, the Claude CLI and the local model runtime, which cannot be done synchronously — use resolveProviderIdentityAsync/makeProviderAsync, or name a provider (anthropic, openai, claude-cli, mock, llama-cpp).
- 3. InferenceError: llama-cpp model "auto" is a selector and cannot be resolved synchronously — picking a tier probes GPU memory. Use resolveProviderIdentityAsync/makeProviderAsync, or name a concrete model (e.g. "gemma-4-e4b").
+ 3. InferenceError: llama-cpp model "auto" is a selector and cannot be resolved synchronously — picking a tier probes GPU memory. Use resolveProviderIdentityAsync/makeProviderAsync, or name a concrete model (e.g. "qwen3.5-4b").
  4. InferenceError: Unknown provider "nope". Available: anthropic, openai, claude-cli, mock, llama-cpp.
- 5. InferenceError: Unknown llama-cpp model "not-a-model". Use a selector (auto, fast, balanced, quality), a curated alias (gemma-4-e2b, gemma-4-e4b, gemma-4-12b, gemma-4-26b-a4b, gemma-4-e2b-q2), an hf: URI, or a path to a .gguf file.
+ 5. InferenceError: Unknown llama-cpp model "not-a-model". Use a selector (auto, fast, balanced, quality), a curated alias (granite-4.1-3b-q2, qwen3.5-4b, qwen3.5-9b, gemma-4-e2b, gemma-4-e4b, gemma-4-12b, gemma-4-26b-a4b, gemma-4-e2b-q2), an hf: URI, or a path to a .gguf file.
  6. Error: MockProvider needs at least one scripted response
 
 [model failure — recorded, never thrown]

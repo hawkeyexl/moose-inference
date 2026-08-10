@@ -23,7 +23,7 @@ console.log("weights live in:", defaultLlamaModelsDirectory());
 console.log("\ncatalog:");
 for (const [alias, entry] of Object.entries(LLAMA_MODELS)) {
   const size = (entry.sizeBytes / GB).toFixed(2).padStart(5);
-  console.log(`  ${alias.padEnd(16)} ${size} GB  ${entry.license}  tier=${entry.tier ?? "-"}`);
+  console.log(`  ${alias.padEnd(18)} ${size} GB  ${entry.license}  tier=${entry.tier ?? "-"}`);
 }
 
 // What `auto` would pick on a given machine. The budget is the larger of free GPU

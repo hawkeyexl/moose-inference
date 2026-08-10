@@ -2,12 +2,32 @@
  * Curated GGUF models for the in-process `llama-cpp` provider, plus the
  * selector-to-model resolution that sits in front of them.
  *
- * Every entry is an unsloth Gemma 4 QAT build. One family keeps the chat
- * template identical across tiers, and QAT (quantization-aware training) is
- * built for 4-bit deployment, so it beats a standard Q4 quant of the same
- * model at a smaller file size (E4B: QAT UD-Q4_K_XL 4.22 GB vs stock
- * Q4_K_M 4.98 GB). Gemma 4's IFEval scores — 94.6 / 96.7 / 97.2 across the
- * three tiers — are what actually predicts schema-conforming output.
+ * The three tiers were chosen by measurement, not by published benchmark:
+ * 26 real documentation pages with their `title` and `description` removed,
+ * refilled through this library under a JSON Schema, and scored against the
+ * human-written originals. See ADR 01009 for the numbers and the method.
+ *
+ * Two results from that run shape this catalog:
+ *
+ * 1. **Quality barely tracks size on schema-constrained extraction.** Every
+ *    model between 1.4 GB and 5.5 GB scored within one standard error of the
+ *    others. The tiers therefore buy latency and headroom for richer schemas
+ *    than that corpus exercises — they do not buy a linear quality gain, and
+ *    should not be described as if they do.
+ * 2. **Latency stability does not track size either, and matters more.** Two
+ *    builds ran away on long pages, generating until they hit a timeout rather
+ *    than closing the JSON: Gemma 4 E2B at Q2 (6 of 12 pages unfinished at
+ *    120s, one still going at 400s) and Granite 4.1 8B at Q4 (6 of 26 pages
+ *    over 20s, three over 115s). Both are excluded from the tiers for that
+ *    reason alone. A tier entry has to terminate.
+ *
+ * That is why the tiers are no longer one family. Chat templates now differ
+ * across tiers, which is fine — node-llama-cpp reads the template out of each
+ * GGUF — but it does mean a prompt tuned against one tier is not automatically
+ * tuned against the next.
+ *
+ * The superseded Gemma aliases are kept, untiered, because consumers pin them
+ * by name; dropping an alias is a hard failure rather than a slower download.
  *
  * Entries pin an exact blob path rather than a `:QUANT` tag. That is a hard
  * requirement, not a style preference: the QAT repos ship NO Q4_K_M — only
@@ -70,26 +90,52 @@ export interface LlamaModelEntry {
  */
 export const LLAMA_MODELS: Readonly<Record<string, LlamaModelEntry>> =
   deepFreezeEntries({
+    "granite-4.1-3b-q2": {
+      uri: "hf:unsloth/granite-4.1-3b-GGUF/granite-4.1-3b-UD-Q2_K_XL.gguf",
+      sizeBytes: 1_414_548_800,
+      license: "Apache-2.0",
+      tier: "fast",
+      notes:
+        "Smallest tier and the quickest measured (4.8s/page). Scores level " +
+        "with models three times its size on schema-constrained extraction.",
+    },
+    "qwen3.5-4b": {
+      uri: "hf:unsloth/Qwen3.5-4B-GGUF/Qwen3.5-4B-UD-Q4_K_XL.gguf",
+      sizeBytes: 2_912_109_728,
+      license: "Apache-2.0",
+      notes:
+        "The default for most machines. Smaller and faster than the Gemma 4 " +
+        "E4B it replaces, at indistinguishable measured quality.",
+      tier: "balanced",
+    },
+    "qwen3.5-9b": {
+      uri: "hf:unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-UD-Q4_K_XL.gguf",
+      sizeBytes: 5_966_095_584,
+      license: "Apache-2.0",
+      tier: "quality",
+      notes:
+        "Best measured of everything tried, and still smaller and faster " +
+        "than the Gemma 4 12B it replaces. Wants a GPU or plenty of RAM.",
+    },
+    // --- Superseded, kept resolvable by name. Untiered: nothing selects these
+    // unless a caller asks for one outright.
     "gemma-4-e2b": {
       uri: "hf:unsloth/gemma-4-E2B-it-qat-GGUF/gemma-4-E2B-it-qat-UD-Q4_K_XL.gguf",
       sizeBytes: 2_620_370_976,
       license: "Apache-2.0",
-      tier: "fast",
-      notes: "IFEval 94.6. Smallest Gemma 4; the floor for this family.",
+      notes: "IFEval 94.6. Former `fast` tier; sound, but larger than Granite.",
     },
     "gemma-4-e4b": {
       uri: "hf:unsloth/gemma-4-E4B-it-qat-GGUF/gemma-4-E4B-it-qat-UD-Q4_K_XL.gguf",
       sizeBytes: 4_215_695_776,
       license: "Apache-2.0",
-      tier: "balanced",
-      notes: "IFEval 96.7. The default for most machines.",
+      notes: "IFEval 96.7. Former `balanced` tier; sound, but larger.",
     },
     "gemma-4-12b": {
       uri: "hf:unsloth/gemma-4-12B-it-qat-GGUF/gemma-4-12B-it-qat-UD-Q4_K_XL.gguf",
       sizeBytes: 6_716_356_800,
       license: "Apache-2.0",
-      tier: "quality",
-      notes: "IFEval 97.2. Dense 12B; wants a GPU or plenty of RAM.",
+      notes: "IFEval 97.2. Former `quality` tier. Dense 12B; wants a GPU.",
     },
     "gemma-4-26b-a4b": {
       uri: "hf:unsloth/gemma-4-26B-A4B-it-qat-GGUF/gemma-4-26B-A4B-it-qat-UD-Q4_K_XL.gguf",
@@ -102,7 +148,11 @@ export const LLAMA_MODELS: Readonly<Record<string, LlamaModelEntry>> =
       uri: "hf:unsloth/gemma-4-E2B-it-qat-GGUF/gemma-4-E2B-it-qat-UD-Q2_K_XL.gguf",
       sizeBytes: 2_186_186_784,
       license: "Apache-2.0",
-      notes: "Q2 build of the fast tier; smallest download, lowest fidelity.",
+      notes:
+        "AVOID. Smallest download, but it does not reliably terminate: 6 of " +
+        "12 pages unfinished at 120s, one still running at 400s, and the " +
+        "pages that did finish proposed identifiers as prose. Kept only so " +
+        "existing pins still resolve.",
     },
   });
 
@@ -115,9 +165,9 @@ function deepFreezeEntries<T extends Record<string, object>>(
 
 /** The alias backing each tier, used by `auto` and the tier keywords. */
 const TIER_ALIAS: Record<LlamaTier, string> = {
-  fast: "gemma-4-e2b",
-  balanced: "gemma-4-e4b",
-  quality: "gemma-4-12b",
+  fast: "granite-4.1-3b-q2",
+  balanced: "qwen3.5-4b",
+  quality: "qwen3.5-9b",
 };
 
 export function isLlamaSelector(model: string): model is LlamaSelector {
@@ -178,7 +228,7 @@ export function resolveLlamaModelRef(model: string): string {
     throw new InferenceError(
       `llama-cpp model "${model}" is a selector and needs a hardware probe to ` +
         `resolve. Use resolveProviderIdentityAsync/makeProviderAsync, or name a ` +
-        `concrete model (e.g. "gemma-4-e4b").`,
+        `concrete model (e.g. "${TIER_ALIAS.balanced}").`,
     );
   }
   const entry = LLAMA_MODELS[model];
