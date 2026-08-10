@@ -27,13 +27,24 @@ interface LlamaModelEntry {
 
 | Alias | Size | Tier | License |
 |---|---:|---|---|
-| `gemma-4-e2b` | 2.62 GB | `fast` | Apache-2.0 |
-| `gemma-4-e4b` | 4.22 GB | `balanced` | Apache-2.0 |
-| `gemma-4-12b` | 6.72 GB | `quality` | Apache-2.0 |
+| `granite-4.1-3b-q2` | 1.41 GB | `fast` | Apache-2.0 |
+| `qwen3.5-4b` | 2.91 GB | `balanced` | Apache-2.0 |
+| `qwen3.5-9b` | 5.97 GB | `quality` | Apache-2.0 |
+| `gemma-4-e2b` | 2.62 GB | — | Apache-2.0 |
+| `gemma-4-e4b` | 4.22 GB | — | Apache-2.0 |
+| `gemma-4-12b` | 6.72 GB | — | Apache-2.0 |
 | `gemma-4-26b-a4b` | 14.25 GB | — | Apache-2.0 |
 | `gemma-4-e2b-q2` | 2.19 GB | — | Apache-2.0 |
 
-All entries are unsloth Gemma 4 QAT builds, ungated. Each is deep-frozen.
+All entries are unsloth GGUF builds, ungated. Each is deep-frozen.
+
+The untiered Gemma entries backed the three tiers until [ADR 01009](https://github.com/hawkeyexl/ts-inference/blob/main/adrs/01009-retier-the-local-model-catalog-by-measurement.md)
+retiered the catalog on measured results. They still resolve by name, so an existing pin keeps
+working; nothing selects them automatically.
+
+`gemma-4-e2b-q2` is kept only so existing pins resolve. **Do not choose it.** It does not
+reliably terminate: on a 12-page benchmark it left 6 pages unfinished at 120 seconds, with one
+still running at 400 seconds.
 
 The catalog is a **vetted default set, not a whitelist gate** — any Hugging Face GGUF reference or
 local `.gguf` path also works.

@@ -125,7 +125,7 @@ export function resolveProviderIdentity(spec: ProviderSpec): ProviderIdentity {
       `llama-cpp model "${model}" is a selector and cannot be resolved ` +
         `synchronously — picking a tier probes GPU memory. Use ` +
         `resolveProviderIdentityAsync/makeProviderAsync, or name a concrete ` +
-        `model (e.g. "gemma-4-e4b").`,
+        `model (e.g. "${aliasForTier("balanced")}").`,
     );
   }
   return { provider: spec.provider, model };

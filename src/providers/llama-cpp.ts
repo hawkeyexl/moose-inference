@@ -18,6 +18,7 @@ import { InferenceError } from "../types.js";
 import { buildCacheKey } from "../cache.js";
 import { extractJson } from "./openai-compat.js";
 import {
+  aliasForTier,
   defaultLlamaModelsDirectory,
   isLlamaSelector,
   resolveLlamaModelRef,
@@ -142,7 +143,7 @@ export class LlamaCppProvider implements InferenceProvider {
     if (isLlamaSelector(model)) {
       throw new InferenceError(
         `llama-cpp model "${model}" is a selector. Constructing a provider ` +
-          `directly needs a concrete model (e.g. "gemma-4-e4b") — use ` +
+          `directly needs a concrete model (e.g. "${aliasForTier("balanced")}") — use ` +
           `makeProviderAsync to resolve a selector against this machine.`,
       );
     }

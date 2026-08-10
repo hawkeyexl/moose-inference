@@ -60,9 +60,9 @@ The default model is the selector `auto`, and resolving it reads GPU memory — 
 
 ```text
 sync factory refused: true
-message: llama-cpp model "auto" is a selector and cannot be resolved synchronously — picking a tier probes GPU memory. Use resolveProviderIdentityAsync/makeProviderAsync, or name a concrete model (e.g. "gemma-4-e4b").
-auto resolved to: { provider: 'llama-cpp', model: 'gemma-4-e4b' }
-model: gemma-4-e4b
+message: llama-cpp model "auto" is a selector and cannot be resolved synchronously — picking a tier probes GPU memory. Use resolveProviderIdentityAsync/makeProviderAsync, or name a concrete model (e.g. "qwen3.5-4b").
+auto resolved to: { provider: 'llama-cpp', model: 'qwen3.5-4b' }
+model: qwen3.5-4b
 verdict: pass zone: auto-pass
 usage reported: { inputTokens: 420, outputTokens: 78 }
 ```
@@ -124,7 +124,7 @@ long-running process, `disposeLlamaModels()` frees them.
 {/* test {"testId":"local-provider","description":"The llama-cpp provider driven through an injected runtime: selector refusal, async resolution, and an unchanged judge call."} */}
 {/* step {"description":"The synchronous factory refuses an unresolved selector and names the async twin (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-provider.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"sync factory refused: true"}} */}
 {/* step {"description":"The synchronous factory refuses an unresolved selector and names the async twin (2/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-provider.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"makeProviderAsync"}} */}
-{/* step {"description":"The async factory resolves auto to a concrete catalog model, never the literal selector","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-provider.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"auto resolved to: { provider: 'llama-cpp', model: 'gemma-4-e4b' }"}} */}
+{/* step {"description":"The async factory resolves auto to a concrete catalog model, never the literal selector","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-provider.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"auto resolved to: { provider: 'llama-cpp', model: 'qwen3.5-4b' }"}} */}
 {/* step {"description":"Judge code is unchanged against a local provider, and usage is reported (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-provider.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"verdict: pass zone: auto-pass"}} */}
 {/* step {"description":"Judge code is unchanged against a local provider, and usage is reported (2/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-provider.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"usage reported: { inputTokens: 420, outputTokens: 78 }"}} */}
 {/* test end */}

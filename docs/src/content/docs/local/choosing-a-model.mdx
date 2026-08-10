@@ -19,8 +19,8 @@ The full catalog and signatures are in the
 | Kind | Example |
 |---|---|
 | Selector | `auto` (default), `fast`, `balanced`, `quality` |
-| Curated alias | `gemma-4-e4b` |
-| Hugging Face URI | `hf:unsloth/gemma-4-12B-it-qat-GGUF/gemma-4-12B-it-qat-UD-Q4_K_XL.gguf` |
+| Curated alias | `qwen3.5-4b` |
+| Hugging Face URI | `hf:unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-UD-Q4_K_XL.gguf` |
 | Local file | `./models/my-model.gguf` |
 
 A bare `user/repo` is **rejected** rather than guessed at — it is almost always a mistyped alias.
@@ -46,18 +46,21 @@ download.
 
 ```text
 catalog:
-  gemma-4-e2b       2.62 GB  Apache-2.0  tier=fast
-  gemma-4-e4b       4.22 GB  Apache-2.0  tier=balanced
-  gemma-4-12b       6.72 GB  Apache-2.0  tier=quality
-  gemma-4-26b-a4b  14.25 GB  Apache-2.0  tier=-
-  gemma-4-e2b-q2    2.19 GB  Apache-2.0  tier=-
+  granite-4.1-3b-q2   1.41 GB  Apache-2.0  tier=fast
+  qwen3.5-4b          2.91 GB  Apache-2.0  tier=balanced
+  qwen3.5-9b          5.97 GB  Apache-2.0  tier=quality
+  gemma-4-e2b         2.62 GB  Apache-2.0  tier=-
+  gemma-4-e4b         4.22 GB  Apache-2.0  tier=-
+  gemma-4-12b         6.72 GB  Apache-2.0  tier=-
+  gemma-4-26b-a4b    14.25 GB  Apache-2.0  tier=-
+  gemma-4-e2b-q2      2.19 GB  Apache-2.0  tier=-
 
 what auto picks:
-   6 GB budget -> fast     -> gemma-4-e2b
-   8 GB budget -> fast     -> gemma-4-e2b
-  16 GB budget -> balanced -> gemma-4-e4b
-  24 GB budget -> quality  -> gemma-4-12b
-  32 GB budget -> quality  -> gemma-4-12b
+   6 GB budget -> fast     -> granite-4.1-3b-q2
+   8 GB budget -> fast     -> granite-4.1-3b-q2
+  16 GB budget -> balanced -> qwen3.5-4b
+  24 GB budget -> quality  -> qwen3.5-9b
+  32 GB budget -> quality  -> qwen3.5-9b
 ```
 
 Every catalog entry is Apache-2.0 and ungated, which matters if you operate somewhere that audits
@@ -71,7 +74,7 @@ get.
 Catalog entries pin an **exact blob path**, never a `:QUANT` tag:
 
 ```text
-hf:unsloth/gemma-4-12B-it-qat-GGUF/gemma-4-12B-it-qat-UD-Q4_K_XL.gguf
+hf:unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-UD-Q4_K_XL.gguf
 ```
 
 A tag could be re-pointed upstream, which would silently change the weights behind a cache key that
@@ -79,9 +82,15 @@ already names the model. Pinning removes that possibility. If you have a populat
 the detail that protects it.
 
 <Aside type="note">
-  All catalog entries are unsloth Gemma 4 QAT builds. QAT is trained for 4-bit deployment, so it
-  beats a stock Q4 quant of the same model at a smaller file size. That is the whole of what you
-  need to know about quantization here.
+  The tiers are not one model family, so chat templates differ between them. node-llama-cpp reads
+  the template out of each GGUF, so this costs you nothing mechanically — but a prompt tuned
+  against one tier is not automatically tuned against the next.
+
+  The tiers were picked by measuring this library's own task rather than by published benchmark
+  scores. Two findings are worth carrying: measured quality barely tracks file size across most of
+  the range, and the failure that actually bites is a model generating until it times out instead
+  of closing the JSON. The tiers buy latency and headroom, not a linear quality gain. See
+  [ADR 01009](https://github.com/hawkeyexl/ts-inference/blob/main/adrs/01009-retier-the-local-model-catalog-by-measurement.md).
 </Aside>
 
 ## What changes under a grammar
@@ -119,9 +128,9 @@ If local output looks worse than you expected, check this before blaming the mod
 - [Local models reference](/inference/reference/local-models/) — the full catalog and every export
 
 {/* test {"testId":"local-catalog","description":"Catalog inspection, tier selection by memory budget, and pinned blob paths."} */}
-{/* step {"description":"The catalog reports sizes and licenses matching the table on the page (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"gemma-4-e2b       2.62 GB  Apache-2.0  tier=fast"}} */}
-{/* step {"description":"The catalog reports sizes and licenses matching the table on the page (2/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"gemma-4-12b       6.72 GB  Apache-2.0  tier=quality"}} */}
-{/* step {"description":"Memory budgets map to the tiers shown on the page, flooring at fast (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"16 GB budget -> balanced -> gemma-4-e4b"}} */}
-{/* step {"description":"Memory budgets map to the tiers shown on the page, flooring at fast (2/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"24 GB budget -> quality  -> gemma-4-12b"}} */}
-{/* step {"description":"Aliases and tiers resolve to an exact pinned blob path, so a model cannot silently re-point","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"hf:unsloth/gemma-4-12B-it-qat-GGUF/gemma-4-12B-it-qat-UD-Q4_K_XL.gguf"}} */}
+{/* step {"description":"The catalog reports sizes and licenses matching the table on the page (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"granite-4.1-3b-q2   1.41 GB  Apache-2.0  tier=fast"}} */}
+{/* step {"description":"The catalog reports sizes and licenses matching the table on the page (2/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"qwen3.5-9b          5.97 GB  Apache-2.0  tier=quality"}} */}
+{/* step {"description":"Memory budgets map to the tiers shown on the page, flooring at fast (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"16 GB budget -> balanced -> qwen3.5-4b"}} */}
+{/* step {"description":"Memory budgets map to the tiers shown on the page, flooring at fast (2/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"24 GB budget -> quality  -> qwen3.5-9b"}} */}
+{/* step {"description":"Aliases and tiers resolve to an exact pinned blob path, so a model cannot silently re-point","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"hf:unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-UD-Q4_K_XL.gguf"}} */}
 {/* test end */}

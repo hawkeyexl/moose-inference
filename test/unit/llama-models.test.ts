@@ -46,9 +46,44 @@ describe("LLAMA_MODELS catalog", () => {
   });
 
   it("has an entry for each concrete tier", () => {
-    expect(LLAMA_MODELS["gemma-4-e2b"]?.tier).toBe("fast");
-    expect(LLAMA_MODELS["gemma-4-e4b"]?.tier).toBe("balanced");
-    expect(LLAMA_MODELS["gemma-4-12b"]?.tier).toBe("quality");
+    expect(LLAMA_MODELS["granite-4.1-3b-q2"]?.tier).toBe("fast");
+    expect(LLAMA_MODELS["qwen3.5-4b"]?.tier).toBe("balanced");
+    expect(LLAMA_MODELS["qwen3.5-9b"]?.tier).toBe("quality");
+  });
+
+  it("carries exactly one entry per tier", () => {
+    // Two entries claiming a tier makes `aliasForTier` depend on key order.
+    for (const tier of ["fast", "balanced", "quality"]) {
+      const claiming = Object.entries(LLAMA_MODELS).filter(
+        ([, entry]) => entry.tier === tier,
+      );
+      expect(claiming.map(([alias]) => alias), tier).toHaveLength(1);
+    }
+  });
+
+  it("keeps the superseded Gemma aliases resolvable but untiered", () => {
+    // Retiering must not delete an alias: consumers pin these by name, and a
+    // removed alias is a hard failure rather than a slower or larger download.
+    for (const alias of [
+      "gemma-4-e2b",
+      "gemma-4-e4b",
+      "gemma-4-12b",
+      "gemma-4-26b-a4b",
+      "gemma-4-e2b-q2",
+    ]) {
+      expect(LLAMA_MODELS[alias], alias).toBeDefined();
+      expect(LLAMA_MODELS[alias]?.tier, alias).toBeUndefined();
+    }
+  });
+
+  it("orders the tiers by ascending weight size", () => {
+    // `tierForBudget` walks LLAMA_TIERS in order and keeps the last that fits;
+    // a heavier `fast` than `balanced` would make selection non-monotonic.
+    const size = (tier: string) =>
+      Object.values(LLAMA_MODELS).find((entry) => entry.tier === tier)!
+        .sizeBytes;
+    expect(size("fast")).toBeLessThan(size("balanced"));
+    expect(size("balanced")).toBeLessThan(size("quality"));
   });
 });
 

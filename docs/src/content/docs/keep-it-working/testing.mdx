@@ -37,7 +37,7 @@ environment variables and skipped by default.
    argv: claude -p ...
    prompt sent over stdin: true
    prompt absent from argv: true
-3. model: gemma-4-e4b
+3. model: qwen3.5-4b
    verdict: pass zone: auto-pass
    no weights downloaded, no GPU touched
 ```
@@ -161,6 +161,6 @@ A broken example fails CI like any other test. See
 {/* step {"description":"MockProvider records every request, so a consumer can assert on the prompt it composed (3/3)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/testing-seams.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"scripted failure recorded: 429 rate limited"}} */}
 {/* step {"description":"An injected ExecFn drives claude-cli, and the prompt travels over stdin rather than argv (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/testing-seams.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"prompt sent over stdin: true"}} */}
 {/* step {"description":"An injected ExecFn drives claude-cli, and the prompt travels over stdin rather than argv (2/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/testing-seams.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"prompt absent from argv: true"}} */}
-{/* step {"description":"An injected LlamaRuntime drives the local path with no weights and no GPU (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/testing-seams.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"3. model: gemma-4-e4b"}} */}
+{/* step {"description":"An injected LlamaRuntime drives the local path with no weights and no GPU (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/testing-seams.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"3. model: qwen3.5-4b"}} */}
 {/* step {"description":"An injected LlamaRuntime drives the local path with no weights and no GPU (2/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/testing-seams.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"no weights downloaded, no GPU touched"}} */}
 {/* test end */}
