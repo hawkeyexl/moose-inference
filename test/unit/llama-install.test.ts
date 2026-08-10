@@ -33,7 +33,12 @@ function execResult(over: Partial<ExecResult> = {}): ExecResult {
   return { code: 0, stdout: "", stderr: "", timedOut: false, ...over };
 }
 
-/** An npm that "succeeds" by creating the directory npm would have created. */
+/**
+ * Stands in for npm: records the argv it was handed and returns whatever
+ * `ExecResult` the test wants. It writes nothing — no `node_modules` is created,
+ * which is why every test that needs the import to succeed also injects
+ * `importShim`.
+ */
 function fakeNpm(over: Partial<ExecResult> = {}): ExecFn & { calls: string[][] } {
   const calls: string[][] = [];
   const fn = ((cmd: string[]) => {
@@ -133,8 +138,21 @@ describe("status reporting", () => {
   // point of the seam: on a machine that HAS it — this one, and CI, which
   // installs it as a devDependency — none of these branches are reachable, so
   // asserting them for real would silently test nothing.
-  const absent = (): Promise<unknown> => Promise.reject(new Error("ENOENT"));
+  //
+  // It carries `ERR_MODULE_NOT_FOUND` because that is what Node actually sets,
+  // and because the code is now what distinguishes "absent" from "installed but
+  // broken". A bare `new Error("ENOENT")` would not exercise the real branch.
+  const absent = (): Promise<unknown> => {
+    const e = new Error(
+      `Cannot find package 'node-llama-cpp'`,
+    ) as NodeJS.ErrnoException;
+    e.code = "ERR_MODULE_NOT_FOUND";
+    return Promise.reject(e);
+  };
   const present = (): Promise<unknown> => Promise.resolve({});
+  /** Installed, but the native binding will not load — ABI, libc, Node version. */
+  const broken = (): Promise<unknown> =>
+    Promise.reject(new Error("dlopen failed: wrong ELF class"));
 
   it("reports present when the consumer has their own copy", async () => {
     const status = await nodeLlamaCppStatus({
@@ -190,6 +208,33 @@ describe("status reporting", () => {
       env: { INFERENCE_NO_AUTO_INSTALL: "1" },
     });
     expect(status.state).toBe("present");
+  });
+
+  it("does not call a broken install missing, or offer to install over it", async () => {
+    // An ABI mismatch, a missing system library, or an unsupported Node all
+    // surface as an import failure that is NOT module-not-found. Treating those
+    // as "absent" would install the same broken package again and bury the real
+    // cause under a download.
+    const status = await nodeLlamaCppStatus({
+      directory: prefix(),
+      probeImport: broken,
+      env: {},
+    });
+    expect(status.state).toBe("refused");
+    expect(status.state === "refused" && status.reason).toMatch(/wrong ELF class/);
+  });
+
+  it("reports a broken install even when a prefix shim exists", async () => {
+    // The consumer's own copy is what failed, and it wins resolution — so a
+    // stale shim must not make the failure look solved.
+    const directory = prefix();
+    writeFileSync(join(directory, "loader.mjs"), "");
+    const status = await nodeLlamaCppStatus({
+      directory,
+      probeImport: broken,
+      env: {},
+    });
+    expect(status.state).toBe("refused");
   });
 });
 

@@ -50,6 +50,8 @@ The reason lines are:
 | ``could not run `claude` (is the Claude CLI installed?)`` | the CLI is absent or not on `PATH` |
 | `node-llama-cpp is not installed (npm i node-llama-cpp)` | the optional peer dependency is missing |
 | `node-llama-cpp could not start (…)` | installed, but the native binding failed to load |
+| `node-llama-cpp is installed but failed to load (…)` | resolved and then threw — ABI, system library, or Node version. Installing cannot fix it, so it is not attempted |
+| `node-llama-cpp is not installed and INFERENCE_NO_AUTO_INSTALL is set` | absent, and the automatic install was refused |
 | `not auto-selectable` | only ever shown for `mock`, which detection never picks |
 
 **Fix:** whichever line is closest to your situation. This is the most common first failure on a
@@ -86,6 +88,26 @@ check, `{ model: "gpt-4o-mini" }` on a machine with an Anthropic key selected `a
 `model: null` is still "use the provider's default" — only a real name is ambiguous.
 
 **Fix:** name the provider alongside the model, or drop `model`.
+
+### `node-llama-cpp is installed but failed to load (<ERR>)`
+
+```text
+node-llama-cpp is installed but failed to load (<ERR>). This is the copy resolved from
+your own node_modules, so reinstalling it here will not help — check the Node version and
+the platform build.
+```
+
+The package resolved and then failed: an ABI mismatch, a missing system library, or a Node version
+the native build does not support.
+
+This is deliberately **not** treated as "not installed". Only `ERR_MODULE_NOT_FOUND` triggers the
+automatic install; anything else would fetch the same broken package again and bury the real cause
+under a download. Detection reports the same thing as
+`node-llama-cpp is installed but failed to load (…)` in its reason lines.
+
+**Fix:** whatever the inner error says — usually rebuilding for your Node version, or a platform
+with no prebuilt binary and no toolchain. `INFERENCE_NO_AUTO_INSTALL` is irrelevant here; nothing
+was going to be installed.
 
 ### `The llama-cpp provider needs node-llama-cpp, and INFERENCE_NO_AUTO_INSTALL is set`
 

@@ -86,6 +86,25 @@ export function defaultLlamaRuntimeDirectory(
   );
 }
 
+/**
+ * Is this import failure "the package is not here", as opposed to "the package
+ * is here and broken"?
+ *
+ * The distinction decides whether installing can possibly help. `ERR_MODULE_NOT_FOUND`
+ * is what Node raises for a missing bare specifier; `MODULE_NOT_FOUND` is its
+ * CJS spelling. Anything else — a failed `dlopen`, an unsupported Node, a
+ * package whose `exports` do not match — means the package resolved and then
+ * failed, and no amount of reinstalling changes that.
+ */
+export function isModuleNotFound(e: unknown): boolean {
+  const code = (e as NodeJS.ErrnoException | undefined)?.code;
+  return code === "ERR_MODULE_NOT_FOUND" || code === "MODULE_NOT_FOUND";
+}
+
+function describe(e: unknown): string {
+  return e instanceof Error ? e.message : String(e);
+}
+
 /** Whether the binding can be used, and at what cost, WITHOUT installing it. */
 export type RuntimeStatus =
   /** Importable right now — either the consumer's own copy or a filled prefix. */
@@ -115,8 +134,18 @@ export async function nodeLlamaCppStatus(
   try {
     await probeImport();
     return { state: "present" };
-  } catch {
-    // Not the consumer's — fall through to our own prefix.
+  } catch (e) {
+    // Only a genuine "no such package" means absent. An ABI mismatch, a missing
+    // system library, or an unsupported Node all fail here too, and installing
+    // over them would fetch the same broken package again while burying the
+    // real cause under a download.
+    if (!isModuleNotFound(e)) {
+      return {
+        state: "refused",
+        reason: `node-llama-cpp is installed but failed to load (${describe(e)})`,
+      };
+    }
+    // Genuinely absent — fall through to our own prefix.
   }
   if (existsSync(join(directory, SHIM))) return { state: "present" };
 

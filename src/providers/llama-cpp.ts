@@ -22,7 +22,7 @@ import {
   isLlamaSelector,
   resolveLlamaModelRef,
 } from "./llama-models.js";
-import { importNodeLlamaCpp } from "./llama-install.js";
+import { importNodeLlamaCpp, isModuleNotFound } from "./llama-install.js";
 import type {
   CompleteJSONRequest,
   CompleteJSONResponse,
@@ -261,8 +261,21 @@ async function loadNodeLlamaCpp(): Promise<LlamaRuntime> {
   let mod: typeof import("node-llama-cpp");
   try {
     mod = await import("node-llama-cpp");
-  } catch {
-    // Not installed here, so fall back to the library's own prefix — installing
+  } catch (e) {
+    // A package that resolved and then failed to load — ABI mismatch, missing
+    // system library, unsupported Node — is not a missing package. Installing
+    // over it would fetch the same broken thing again and replace a precise
+    // error with a download.
+    if (!isModuleNotFound(e)) {
+      throw new InferenceError(
+        `node-llama-cpp is installed but failed to load (${
+          e instanceof Error ? e.message : String(e)
+        }). This is the copy resolved from your own node_modules, so ` +
+          `reinstalling it here will not help — check the Node version and the ` +
+          `platform build.`,
+      );
+    }
+    // Genuinely absent, so fall back to the library's own prefix — installing
     // it there if needed. npm does not install optional peers, and detection
     // ends at this provider precisely because it needs no credentials, so
     // refusing here would strand the one machine `auto` exists to serve.
