@@ -252,6 +252,43 @@ describe("resolution through the factory", () => {
   });
 });
 
+describe("a model without a provider is ambiguous", () => {
+  it("throws rather than handing the name to whichever provider won", async () => {
+    // A model name belongs to one provider. Carrying "gpt-4o-mini" into a
+    // detected `anthropic` produced a 404 at call time — after the caller had
+    // already paid for detection and whatever work led up to it.
+    process.env["ANTHROPIC_API_KEY"] = "k";
+    await expect(
+      resolveProviderIdentityAsync(spec({ model: "gpt-4o-mini" })),
+    ).rejects.toThrow(InferenceError);
+    await expect(
+      resolveProviderIdentityAsync(spec({ model: "gpt-4o-mini" })),
+    ).rejects.toThrow(/provider/i);
+  }, 30_000);
+
+  it("throws for an explicit 'auto' too", async () => {
+    process.env["ANTHROPIC_API_KEY"] = "k";
+    await expect(
+      resolveProviderIdentityAsync(spec({ provider: "auto", model: "gpt-4o" })),
+    ).rejects.toThrow(InferenceError);
+  }, 30_000);
+
+  it("still treats a null model as unset, not as a name", async () => {
+    // `null` is documented as "use the per-provider default"; only a real name
+    // is ambiguous.
+    process.env["ANTHROPIC_API_KEY"] = "k";
+    const identity = await resolveProviderIdentityAsync(spec({ model: null }));
+    expect(identity.model).toBe("claude-sonnet-4-5");
+  }, 30_000);
+
+  it("allows a model once the provider is named", async () => {
+    expect(
+      (await resolveProviderIdentityAsync({ provider: "openai", model: "gpt-4o" }))
+        .model,
+    ).toBe("gpt-4o");
+  });
+});
+
 describe("the synchronous path refuses to guess", () => {
   it("throws for an omitted provider instead of returning undefined", () => {
     // It used to return { provider: undefined, model: "unknown" } — cache-key

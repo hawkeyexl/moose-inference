@@ -141,6 +141,23 @@ export function resolveProviderIdentity(spec: ProviderSpec): ProviderIdentity {
 export async function resolveProviderIdentityAsync(
   spec: ProviderSpec,
 ): Promise<ProviderIdentity> {
+  // A model name belongs to exactly one provider, so it cannot be carried into
+  // whichever provider detection happens to pick: `{ model: "gpt-4o-mini" }` on
+  // a machine with an Anthropic key selected `anthropic` and then 404'd at call
+  // time, after the caller had already paid for detection. `null` still means
+  // "use the default" — only a real name is ambiguous.
+  if (
+    (spec.provider == null || spec.provider === "auto") &&
+    spec.model != null
+  ) {
+    throw new InferenceError(
+      `Model "${spec.model}" was given without a provider, and a model name ` +
+        `does not say which provider owns it. Name the provider too ` +
+        `(${Object.keys(DEFAULT_MODELS).join(", ")}), or drop the model to ` +
+        `take the detected provider's default.`,
+    );
+  }
+
   // Provider first, then the model logic for whichever provider won.
   const provider =
     spec.provider == null || spec.provider === "auto"

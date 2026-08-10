@@ -166,7 +166,64 @@ A fresh session per call — the contract is single-shot. The schema is compiled
 **and** restated in the system prompt, because the grammar hides descriptions from the model.
 Truncation at `maxTokens` is reported as an error naming the limit rather than a validation failure.
 
+## Getting the runtime
+
+`node-llama-cpp` is an **optional peer dependency**, and npm does not install optional peers. Since
+detection ends at `llama-cpp` precisely because it needs no key and no account, a machine with no
+credentials and no binding would otherwise have nothing left to fall back to.
+
+So the library installs it on demand, into a directory it owns — never your `node_modules`, your
+`package.json`, or your lockfile.
+
+```ts
+function defaultLlamaRuntimeDirectory(env?: Record<string, string | undefined>): string;
+function nodeLlamaCppStatus(options?: RuntimeInstallOptions): Promise<RuntimeStatus>;
+function importNodeLlamaCpp(options?: RuntimeInstallOptions): Promise<unknown>;
+function resetRuntimeInstall(): void;
+
+type RuntimeStatus =
+  | { state: "present" }
+  | { state: "installable"; directory: string }
+  | { state: "refused"; reason: string };
+
+interface RuntimeInstallOptions {
+  directory?: string;   // defaults to defaultLlamaRuntimeDirectory()
+  exec?: ExecFn;        // test seam
+  env?: Record<string, string | undefined>;
+  timeoutMs?: number;   // default 15 minutes
+  importShim?: (url: string) => Promise<unknown>;   // test seam
+  probeImport?: () => Promise<unknown>;             // test seam
+}
+```
+
+Resolution runs in three steps, stopping at the first that works: your own installed copy, then
+`<runtime dir>/loader.mjs` from an earlier run, then an install.
+
+| Variable | Effect |
+|---|---|
+| `INFERENCE_RUNTIME_DIR` | Where the binding is installed. Default `~/.hawkeyexl-inference/runtime`. |
+| `INFERENCE_NO_AUTO_INSTALL` | Set to anything non-empty to refuse installing. `llama-cpp` then reports unavailable instead. |
+
+`nodeLlamaCppStatus` answers whether the runtime is usable **without installing it**. That is what
+keeps `availableProviders()` a query: asking a machine what it can do never changes what it can do.
+The install happens later, when the provider is actually resolved, and warns once before it starts.
+
+`importNodeLlamaCpp` is exported so you can pre-fetch deliberately — in a Docker build, say, so the
+first real run does not pay for it.
+
+<Aside type="caution" title="It is a native module">
+  Prebuilt binaries cover win32-x64, darwin-arm64 and linux-x64. Anywhere else falls back to a CMake
+  build that needs a toolchain and can take minutes, which is why the install timeout is 15 minutes
+  rather than the usual 60 seconds. Set `INFERENCE_NO_AUTO_INSTALL` if you would rather it never
+  tried.
+</Aside>
+
+The shim is written **only after npm exits 0**, so an interrupted install leaves a prefix that is
+retried rather than one that looks ready and is not. Concurrent callers in one process share a
+single install; concurrent processes serialise on a lock file in the prefix.
+
 ## Source of truth
 
-`src/providers/llama-models.ts`, `llama-cpp.ts`, and `llama-clean.ts`. Catalog invariants, tier
-selection, and every clearing rule are pinned in `test/unit/llama-*.test.ts`.
+`src/providers/llama-models.ts`, `llama-cpp.ts`, `llama-clean.ts`, and `llama-install.ts`. Catalog
+invariants, tier selection, every clearing rule, and the install's ordering and concurrency
+guarantees are pinned in `test/unit/llama-*.test.ts`.

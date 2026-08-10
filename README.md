@@ -85,6 +85,11 @@ const provider = await makeProviderAsync({});
 | `llama-cpp` | GBNF grammar compiled from the schema | — (runs locally) | yes |
 | `mock` | scripted responses | — | synthetic |
 
+Omit `provider` and the highest-priority one this machine can actually use is detected, ending at
+`llama-cpp` — which needs no key, and whose native binding is installed on demand into
+`~/.hawkeyexl-inference/runtime` if it is missing. That install warns once and is refused by
+`INFERENCE_NO_AUTO_INSTALL`; it never touches your `package.json`, lockfile or `node_modules`.
+
 Usage reporting is the column that decides whether cost accounting works: a provider that reports no
 tokens makes a budget gate inert. See
 [Choose a provider](https://hawkeyexl.github.io/inference/get-started/choose-a-provider/).
@@ -119,6 +124,13 @@ Recorded as ADRs in [adrs/](adrs):
   specified, ending at the local model
 - [01005](adrs/01005-docset-strategy-and-executable-examples.md) — a CUJ-first documentation set,
   with samples that CI executes
+- [01006](adrs/01006-documenting-failure-and-orchestration.md) — document failure and orchestration,
+  and gate both against the source
+- [01007](adrs/01007-harden-two-operational-failure-paths.md) — harden two operational failure paths:
+  non-JSON CLI output, and an unsupported Node
+- [01008](adrs/01008-auto-install-the-local-runtime.md) — auto-install the local runtime into a
+  library-owned prefix, why the shim beats `createRequire`, and why a model without a provider is
+  now an error
 
 ## License
 
