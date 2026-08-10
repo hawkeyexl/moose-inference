@@ -74,6 +74,11 @@ Every superseded alias stays resolvable, untiered.
   reads the template from each GGUF, so this is a prompt-portability cost, not a correctness one.
 - Bad, because `auto` now downloads different weights than before on the same machine. Anyone
   who wants the old behaviour must pin the alias explicitly.
+- Bad, because the resolved alias is part of the cache key, so every entry a consumer cached
+  through `auto` or a tier keyword becomes a miss and re-runs. That is correct — the weights
+  really did change, and replaying another model's verdict would be worse — but on a large
+  populated cache it is a one-off re-run, not a free upgrade. Pinning the old alias keeps both
+  the old model and its cached entries.
 - Neutral, because the measured quality differences between 1.4 GB and 5.5 GB are inside one
   standard error. The tiers are honestly a latency and headroom ladder, not a quality ladder,
   and the source comment now says so.

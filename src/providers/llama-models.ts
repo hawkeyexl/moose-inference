@@ -30,12 +30,21 @@
  * by name; dropping an alias is a hard failure rather than a slower download.
  *
  * Entries pin an exact blob path rather than a `:QUANT` tag. That is a hard
- * requirement, not a style preference: the QAT repos ship NO Q4_K_M — only
- * UD-Q4_K_XL and UD-Q2_K_XL — so a tag would fail to resolve outright. They
- * also carry `mmproj-*.gguf` (the ~1 GB vision projector; Gemma 4 is natively
- * multimodal) and `mtp-*.gguf` next to the weights, which text-only judging
- * must not download. A pinned path also cannot silently re-point underneath a
- * cache key that already claims it.
+ * requirement, not a style preference, and it holds for every entry:
+ *
+ * - A tag can be re-pointed upstream, which silently changes the weights
+ *   behind a cache key that already names the model. A pinned path cannot.
+ *   This reason alone is sufficient, and it applies to all repos.
+ * - Most of these repos carry `mmproj-*.gguf` (the ~1 GB vision projector)
+ *   and some carry `mtp-*.gguf` beside the weights, which text-only judging
+ *   must not download.
+ * - On the Gemma QAT repos a tag would not resolve at all: they ship NO
+ *   Q4_K_M, only UD-Q4_K_XL and UD-Q2_K_XL.
+ *
+ * Note the last point is specific to the Gemma QAT repos, which now back only
+ * untiered entries. The Qwen3.5 and Granite repos behind the three tiers DO
+ * publish Q4_K_M, so a tag would resolve there — and would still be wrong, for
+ * the first reason. Do not read "the tag resolves" as "the tag is allowed".
  */
 import { readdirSync } from "node:fs";
 import { homedir } from "node:os";
