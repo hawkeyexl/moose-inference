@@ -13,6 +13,8 @@
 import { InferenceError } from "../types.js";
 import { realExec } from "../exec.js";
 import { defaultLlamaRuntime } from "./llama-cpp.js";
+import { nodeLlamaCppStatus } from "./llama-install.js";
+import type { LlamaRuntime } from "./llama-cpp.js";
 import type { ProviderName, ProviderSpec } from "./index.js";
 
 /**
@@ -85,11 +87,33 @@ function probeClaudeCli(spec: ProviderSpec): Promise<boolean> {
   return probing;
 }
 
-function probeLlamaCpp(spec: ProviderSpec): Promise<Probe> {
-  const runtime =
-    spec.llamaRuntime ?? spec.llamaCpp?.runtime ?? defaultLlamaRuntime();
-  // The same call the `auto` MODEL selector makes, so choosing llama-cpp here
-  // costs nothing extra: it is loaded either way.
+async function probeLlamaCpp(spec: ProviderSpec): Promise<Probe> {
+  const injected = spec.llamaRuntime ?? spec.llamaCpp?.runtime;
+  if (injected) return budgetProbe(injected);
+
+  // Ask whether the binding is usable BEFORE touching it. Going straight to
+  // `getMemoryBudgetBytes` would route through the auto-installer, so merely
+  // asking `availableProviders()` what this machine can do would fetch a native
+  // module — a query with a side effect, and a slow one.
+  const status = await nodeLlamaCppStatus();
+  if (status.state === "refused") {
+    return { available: false, reason: status.reason };
+  }
+  if (status.state === "installable") {
+    // Usable, at the cost of an install that happens when it is actually
+    // needed. `warnInstalling` announces it at that point.
+    return { available: true };
+  }
+  // Present: load it for real, which is also what catches a binding that is
+  // installed but whose backend fails to start.
+  return budgetProbe(defaultLlamaRuntime());
+}
+
+/**
+ * The same call the `auto` MODEL selector makes, so choosing llama-cpp here
+ * costs nothing extra: it is loaded either way.
+ */
+function budgetProbe(runtime: LlamaRuntime): Promise<Probe> {
   return runtime.getMemoryBudgetBytes().then(
     () => ({ available: true }),
     (e: unknown) => ({

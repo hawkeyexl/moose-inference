@@ -100,6 +100,16 @@ export type {
   ClearLlamaModelsResult,
   ClearedModelFile,
 } from "./providers/llama-clean.js";
+export {
+  defaultLlamaRuntimeDirectory,
+  importNodeLlamaCpp,
+  nodeLlamaCppStatus,
+  resetRuntimeInstall,
+} from "./providers/llama-install.js";
+export type {
+  RuntimeInstallOptions,
+  RuntimeStatus,
+} from "./providers/llama-install.js";
 
 // Process seam
 export { realExec } from "./exec.js";

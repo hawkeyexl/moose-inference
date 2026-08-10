@@ -22,6 +22,7 @@ import {
   isLlamaSelector,
   resolveLlamaModelRef,
 } from "./llama-models.js";
+import { importNodeLlamaCpp } from "./llama-install.js";
 import type {
   CompleteJSONRequest,
   CompleteJSONResponse,
@@ -260,13 +261,13 @@ async function loadNodeLlamaCpp(): Promise<LlamaRuntime> {
   let mod: typeof import("node-llama-cpp");
   try {
     mod = await import("node-llama-cpp");
-  } catch (e) {
+  } catch {
+    // Not installed here, so fall back to the library's own prefix — installing
+    // it there if needed. npm does not install optional peers, and detection
+    // ends at this provider precisely because it needs no credentials, so
+    // refusing here would strand the one machine `auto` exists to serve.
     // Resetting `runtimePromise` is the caller's job — see `defaultLlamaRuntime`.
-    throw new InferenceError(
-      `The llama-cpp provider needs the optional peer dependency ` +
-        `node-llama-cpp. Install it with: npm i node-llama-cpp ` +
-        `(original error: ${e instanceof Error ? e.message : String(e)})`,
-    );
+    mod = (await importNodeLlamaCpp()) as typeof import("node-llama-cpp");
   }
 
   const { getLlama, resolveModelFile, LlamaChatSession, TokenMeter } = mod;

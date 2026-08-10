@@ -70,6 +70,62 @@ or set to `"auto"`.
 
 **Fix:** `await makeProviderAsync(spec)`, or name a provider.
 
+### `Model "<M>" was given without a provider, and a model name does not say which provider owns it`
+
+```text
+Model "gpt-4o-mini" was given without a provider, and a model name does not say which
+provider owns it. Name the provider too (anthropic, openai, claude-cli, mock, llama-cpp),
+or drop the model to take the detected provider's default.
+```
+
+You set `model` but left `provider` omitted or `"auto"`. A model name belongs to exactly one
+provider, so it cannot be carried into whichever provider detection happens to pick — before this
+check, `{ model: "gpt-4o-mini" }` on a machine with an Anthropic key selected `anthropic` and then
+404'd at call time, after you had already paid for detection.
+
+`model: null` is still "use the provider's default" — only a real name is ambiguous.
+
+**Fix:** name the provider alongside the model, or drop `model`.
+
+### `The llama-cpp provider needs node-llama-cpp, and INFERENCE_NO_AUTO_INSTALL is set`
+
+The local runtime is absent and you have refused the automatic install.
+
+**Fix:** `npm i node-llama-cpp@^3.19.0` yourself, unset `INFERENCE_NO_AUTO_INSTALL`, or name a
+provider that does not need it.
+
+### `Installing node-llama-cpp into <DIR> failed (exit <N>)`
+
+npm ran and returned non-zero. The message carries the last lines of npm's output, then repeats the
+manual command. Nothing is left behind: the prefix is marked ready only after a clean exit, so the
+next call retries rather than importing a half-installed directory.
+
+**Fix:** whatever npm's output says — usually network, registry auth, or a missing build toolchain
+on a platform with no prebuilt binary.
+
+### `Could not run npm to install node-llama-cpp (<ERR>)`
+
+npm itself could not be spawned — common on images that ship node without npm, or where only pnpm
+or yarn is on `PATH`.
+
+**Fix:** install the package with whatever package manager you do have, or name a different
+provider.
+
+### `Installing node-llama-cpp into <DIR> timed out`
+
+The install exceeded 15 minutes. On a platform without a prebuilt binary this is a source build, and
+a slow machine can genuinely exceed it.
+
+**Fix:** retry, raise `timeoutMs`, or install it yourself.
+
+### `Timed out waiting for another process to install node-llama-cpp into <DIR>`
+
+Another process holds the prefix lock. Concurrent runs serialise so two npm processes never write
+one `node_modules`.
+
+**Fix:** wait for the other run. If nothing else is running, the lock was orphaned by a killed
+process — remove the named `.install.lock` and retry.
+
 ### `llama-cpp model "<M>" is a selector and cannot be resolved synchronously — …`
 
 A selector (`auto`, `fast`, `balanced`, `quality`) reached a synchronous factory. Resolving it reads
