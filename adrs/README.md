@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Behavior decisions in `@hawkeyexl/inference` ship with an ADR in
+Behavior decisions in `moose-inference` ship with an ADR in
 [MADR 4.0.0](https://adr.github.io/madr/) format — see the "Architecture Decision Records" section
 of [CLAUDE.md](../CLAUDE.md) for when one is required and what it must contain.
 
@@ -21,3 +21,4 @@ of [CLAUDE.md](../CLAUDE.md) for when one is required and what it must contain.
 | [01007](01007-harden-two-operational-failure-paths.md) | Harden two operational failure paths: non-JSON CLI output, and an unsupported Node |
 | [01008](01008-auto-install-the-local-runtime.md) | Auto-install the local runtime into a library-owned prefix, and refuse a model without a provider |
 | [01009](01009-retier-the-local-model-catalog-by-measurement.md) | Choose the local model tiers by measuring this library's own task, not by published benchmarks |
+| [01010](01010-rename-to-moose-inference.md) | Rename the package, repository, and docs site to `moose-inference` |

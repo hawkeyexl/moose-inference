@@ -11,7 +11,7 @@ import judgeEnsemble from '@examples/judge-ensemble.mjs?raw';
 Run the same question past a model N times and turn the answers into a decision you can defend.
 
 This page covers the ensemble, the consensus math, and the zone routing.
-[Caching](/inference/judge/caching/) and [budgets](/inference/judge/cost-and-budgets/) build on it.
+[Caching](/moose-inference/judge/caching/) and [budgets](/moose-inference/judge/cost-and-budgets/) build on it.
 
 ## The promise first
 
@@ -102,7 +102,7 @@ agreement.
 individual runs in between — to cache them, to price them, or to log each verdict.
 
 ```ts
-import { computeConsensus, runEnsemble, zoneFor } from "@hawkeyexl/inference";
+import { computeConsensus, runEnsemble, zoneFor } from "moose-inference";
 
 const runs = await runEnsemble({ provider, system, user, runs: 3 });
 const base = computeConsensus(runs);
@@ -122,10 +122,10 @@ want diversity, prefer more runs over more randomness.
 
 ## Next
 
-- Stop paying for unchanged subjects → [Caching](/inference/judge/caching/)
-- Keep spend inside a ceiling → [Cost and budgets](/inference/judge/cost-and-budgets/)
-- Word the verdict in your own domain → [Custom verdict schema](/inference/judge/verdict-schema/)
-- Test all of it offline → [Testing your integration](/inference/keep-it-working/testing/)
+- Stop paying for unchanged subjects → [Caching](/moose-inference/judge/caching/)
+- Keep spend inside a ceiling → [Cost and budgets](/moose-inference/judge/cost-and-budgets/)
+- Word the verdict in your own domain → [Custom verdict schema](/moose-inference/judge/verdict-schema/)
+- Test all of it offline → [Testing your integration](/moose-inference/keep-it-working/testing/)
 
 {/* test {"testId":"judge-ensemble","description":"The anchor journey: ensemble, consensus, zones, and the errored-run safety property."} */}
 {/* step {"description":"A unanimous high-confidence ensemble auto-resolves with full agreement (1/3)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/judge-ensemble.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"verdict: pass"}} */}

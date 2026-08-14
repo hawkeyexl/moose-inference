@@ -10,7 +10,7 @@ import {
   makeProvider,
   makeProviderAsync,
   resolveProviderIdentityAsync,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 // A stand-in for node-llama-cpp. Reports a 16 GB budget and answers with a fixed verdict.
 const fakeRuntime = {

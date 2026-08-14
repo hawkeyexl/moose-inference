@@ -10,7 +10,7 @@ import { Aside } from '@astrojs/starlight/components';
 Every message the library can produce, verbatim, with its trigger and its fix.
 
 If you arrived with a message in hand, use your browser's find. If you are not sure which class of
-failure you have, start at [diagnosing a failure](/inference/troubleshooting/).
+failure you have, start at [diagnosing a failure](/moose-inference/troubleshooting/).
 
 <Aside type="note" title="Two classes, and it matters which you have">
   **Operational** failures are thrown as `InferenceError`, at construction, before any call. Catch
@@ -26,7 +26,7 @@ The Anthropic provider was constructed and `process.env[apiKeyEnv]` was empty. `
 `ANTHROPIC_API_KEY` unless you set `apiKeyEnv`.
 
 **Fix:** export the key, name a different provider, or omit `provider` entirely and let
-[detection](/inference/get-started/choose-a-provider/#or-dont-choose) pick one that works.
+[detection](/moose-inference/get-started/choose-a-provider/#or-dont-choose) pick one that works.
 
 ### `OpenAI provider needs <VAR> set (or point baseUrl at a local server)`
 
@@ -56,7 +56,7 @@ The reason lines are:
 
 **Fix:** whichever line is closest to your situation. This is the most common first failure on a
 machine with no credentials — see
-[common failures](/inference/troubleshooting/common-failures/#no-provider-is-available).
+[common failures](/moose-inference/troubleshooting/common-failures/#no-provider-is-available).
 
 ### `No provider specified. Detecting one probes the environment, …`
 
@@ -202,7 +202,7 @@ Ajv rejected the response on the final attempt. One clause per validation error,
 
 **Fix:** usually the schema, not the model. Check the shape is expressible — and if you are on a
 local model, that you are not relying on `required` or numeric bounds, which
-[a grammar does not enforce](/inference/local/choosing-a-model/#what-changes-under-a-grammar).
+[a grammar does not enforce](/moose-inference/local/choosing-a-model/#what-changes-under-a-grammar).
 
 ### `Response contained no parseable JSON object`
 
@@ -219,9 +219,9 @@ through verbatim; when the body has none you get `HTTP 401`, `HTTP 429`, `HTTP 5
 
 <Aside type="danger" title="A 429 does not look like a rate limit">
   It arrives as an ordinary errored run, and an errored run
-  [forces `human-review`](/inference/judge/#the-exact-boundaries). Under concurrency a rate limit
+  [forces `human-review`](/moose-inference/judge/#the-exact-boundaries). Under concurrency a rate limit
   therefore shows up as a growing review queue rather than as an error. See
-  [running at scale](/inference/judge/at-scale/#what-a-429-actually-becomes).
+  [running at scale](/moose-inference/judge/at-scale/#what-a-429-actually-becomes).
 </Aside>
 
 ### `Empty completion response`
@@ -290,11 +290,11 @@ once. A banner or an HTML page means something is intercepting the command; try 
 ### `Empty command`
 
 Not an error but a field: `realExec([])` returns `spawnError: "Empty command"`. See the
-[exec reference](/inference/reference/exec/#execresult).
+[exec reference](/moose-inference/reference/exec/#execresult).
 
 ## See it for yourself
 
 Every message above is provoked for real by
-[`examples/diagnose-errors.mjs`](https://github.com/hawkeyexl/inference/blob/main/examples/diagnose-errors.mjs),
+[`examples/diagnose-errors.mjs`](https://github.com/hawkeyexl/moose-inference/blob/main/examples/diagnose-errors.mjs),
 which runs in CI. `scripts/check-error-coverage.mjs` fails the build if a `throw` in `src/` has no
 entry on this page — so this reference cannot quietly fall behind the code.

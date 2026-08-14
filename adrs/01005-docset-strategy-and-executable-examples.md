@@ -70,7 +70,7 @@ runs.
 The samples import the package **by its published name**:
 
 ```js
-import { MockProvider, completeValidatedJSON } from "@hawkeyexl/inference";
+import { MockProvider, completeValidatedJSON } from "moose-inference";
 ```
 
 This resolves via Node's package self-reference — a package with a `name` and an `exports` map can
@@ -78,7 +78,7 @@ import itself from inside its own directory — so it resolves to `dist/index.js
 `npm run build`. Nothing in a sample is a lie about what a consumer types.
 
 Rejected: `docs/examples/`. `docs/` is its own private npm workspace with `"name":
-"inference-docs"`, so self-reference from inside it would resolve to *that* package and the samples
+"moose-inference-docs"`, so self-reference from inside it would resolve to *that* package and the samples
 would need a relative path into `src/` — visibly not what a consumer writes.
 
 Also rejected: a `file:` or `link:` dependency from `docs/` back to the root. `CLAUDE.md` bans
@@ -114,8 +114,8 @@ resolve by either mechanism. Measured against `doc-detective@4.37.1`:
 
 | Inlined into a `runCode` step | Result |
 |---|---|
-| `import { makeProvider } from "@hawkeyexl/inference"` | `ERR_MODULE_NOT_FOUND` |
-| `require("@hawkeyexl/inference")` | `MODULE_NOT_FOUND` |
+| `import { makeProvider } from "moose-inference"` | `ERR_MODULE_NOT_FOUND` |
+| `require("moose-inference")` | `MODULE_NOT_FOUND` |
 
 A sample therefore cannot be inlined; it has to be launched from a file inside the package, where
 self-reference resolves. That is the whole reason the launcher exists.

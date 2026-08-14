@@ -8,7 +8,7 @@ sidebar:
 import { Aside } from '@astrojs/starlight/components';
 
 Seven failures that account for most of the trouble, each with more context than the
-[error reference](/inference/reference/errors/) can give in a row.
+[error reference](/moose-inference/reference/errors/) can give in a row.
 
 ## No provider is available
 
@@ -34,7 +34,7 @@ Any one of these fixes it:
 | `npm install node-llama-cpp` | a few GB of disk, no account |
 
 The last row is the one people miss: it needs **no credential at all**. See
-[run models locally](/inference/local/).
+[run models locally](/moose-inference/local/).
 
 <Aside type="note">
   Detection never selects `mock`, so `not auto-selectable` in the list is expected rather than a
@@ -111,20 +111,20 @@ deeply nested objects, long `enum` lists, and tight `pattern` constraints are al
   Under grammar-constrained decoding `required` is ignored, `additionalProperties` defaults to
   `false`, and numeric bounds are not enforced. A schema that works against a hosted provider can
   fail here for reasons that have nothing to do with the prompt. See
-  [what changes under a grammar](/inference/local/choosing-a-model/#what-changes-under-a-grammar).
+  [what changes under a grammar](/moose-inference/local/choosing-a-model/#what-changes-under-a-grammar).
 </Aside>
 
 ## A 429 that does not look like one
 
 A rate limit arrives as an ordinary errored run — `429 rate limited`, or whatever your provider
 returns — and an errored run
-[forces `human-review`](/inference/judge/#the-exact-boundaries).
+[forces `human-review`](/moose-inference/judge/#the-exact-boundaries).
 
 So the symptom is **a growing human-review queue**, not an error. It reads like the model becoming
 less certain, which invites tuning thresholds instead of backing off the request rate.
 
 If your review pile grew right after you raised concurrency, that is this. See
-[running at scale](/inference/judge/at-scale/#what-a-429-actually-becomes).
+[running at scale](/moose-inference/judge/at-scale/#what-a-429-actually-becomes).
 
 ## A budget that is not being enforced
 
@@ -140,7 +140,7 @@ if (pricing === undefined) warn(`no price for ${provider.modelName()} — the bu
 
 Three roads lead here: a hosted model absent from the price table, `claude-cli` (which reports no
 token usage at all), and any local model. Full detail in
-[cost and budgets](/inference/judge/cost-and-budgets/#the-trap).
+[cost and budgets](/moose-inference/judge/cost-and-budgets/#the-trap).
 
 ## Something ran twice that should have been cached
 
@@ -149,14 +149,14 @@ Cache misses that should be hits usually come down to one of three things:
 1. **Both `cache` and `cacheKey` are required.** The cache is consulted only when you pass both.
 2. **A fresh schema object per call** defeats `validatorFor`'s identity-keyed cache — a different
    problem with the same smell. See
-   [the performance trap](/inference/extract/#the-performance-trap).
+   [the performance trap](/moose-inference/extract/#the-performance-trap).
 3. **A resolved selector changed the model name.** Weights cached under `auto` on a small machine
    will not be hit on a larger one, because the key names the concrete model that ran. That is the
    async factory working as intended.
 
 ## Still stuck
 
-- [Error reference](/inference/reference/errors/) — every message, verbatim
-- [Warnings reference](/inference/reference/warnings/) — what the library logs, and when
-- [Open an issue](https://github.com/hawkeyexl/inference/issues) — include the exact message and
+- [Error reference](/moose-inference/reference/errors/) — every message, verbatim
+- [Warnings reference](/moose-inference/reference/warnings/) — what the library logs, and when
+- [Open an issue](https://github.com/hawkeyexl/moose-inference/issues) — include the exact message and
   which provider you were on

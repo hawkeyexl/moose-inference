@@ -10,8 +10,8 @@ import manageModelFiles from '@examples/manage-model-files.mjs?raw';
 
 Finding multi-gigabyte weights, moving them somewhere with room, and deleting them safely.
 
-Choosing what to download is [choosing a model](/inference/local/choosing-a-model/). Signatures are
-in the [local models reference](/inference/reference/local-models/#model-files-on-disk).
+Choosing what to download is [choosing a model](/moose-inference/local/choosing-a-model/). Signatures are
+in the [local models reference](/moose-inference/reference/local-models/#model-files-on-disk).
 
 ## Where weights live
 
@@ -123,9 +123,9 @@ disposing one provider's model would break another provider that named the same 
 
 ## Next
 
-- [Choosing a model](/inference/local/choosing-a-model/) — what to download in the first place
-- [Local models reference](/inference/reference/local-models/) — full signatures
-- [ADR 01003](https://github.com/hawkeyexl/inference/blob/main/adrs/01003-in-process-local-models-via-node-llama-cpp.md) — why the directory is owned rather than shared
+- [Choosing a model](/moose-inference/local/choosing-a-model/) — what to download in the first place
+- [Local models reference](/moose-inference/reference/local-models/) — full signatures
+- [ADR 01003](https://github.com/hawkeyexl/moose-inference/blob/main/adrs/01003-in-process-local-models-via-node-llama-cpp.md) — why the directory is owned rather than shared
 
 {/* test {"testId":"manage-model-files","description":"Model directory resolution, dryRun previewing, selective clearing, and the safety guarantees."} */}
 {/* step {"description":"An alias resolves to its on-disk blob name, and presence can be checked without downloading.","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/manage-model-files.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"is gemma-4-e2b downloaded: true"}} */}

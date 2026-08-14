@@ -1,7 +1,7 @@
 // Running an ensemble across many subjects, and what concurrency does to a budget gate.
 // Runs with no API key: MockProvider stands in for a real provider.
 
-import { MockProvider, costOfRuns, mockVerdict, pricingFor, runEnsemble } from "@hawkeyexl/inference";
+import { MockProvider, costOfRuns, mockVerdict, pricingFor, runEnsemble } from "moose-inference";
 
 const subjects = Array.from({ length: 12 }, (_, i) => `page-${String(i + 1).padStart(2, "0")}.md`);
 const system = "You evaluate whether a page satisfies an assertion.";

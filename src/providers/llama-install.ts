@@ -252,7 +252,7 @@ async function runInstall(
           version: "0.0.0",
           private: true,
           description:
-            "Auto-installed runtime for @hawkeyexl/inference. Safe to delete.",
+            "Auto-installed runtime for moose-inference. Safe to delete.",
         },
         null,
         2,

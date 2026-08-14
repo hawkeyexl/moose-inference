@@ -10,7 +10,7 @@ import costBudget from '@examples/cost-budget.mjs?raw';
 
 Price a run, and know exactly when the number can be trusted.
 
-The price table and full signatures are in the [cost reference](/inference/reference/cost/).
+The price table and full signatures are in the [cost reference](/moose-inference/reference/cost/).
 
 ## The rule
 
@@ -122,8 +122,8 @@ unbounded one. Without it, the gate is inert — see above.
 
 ## Next
 
-- [Caching](/inference/judge/caching/) — the cheapest call is the one you do not make
-- [Cost reference](/inference/reference/cost/) — the full price table and signatures
+- [Caching](/moose-inference/judge/caching/) — the cheapest call is the one you do not make
+- [Cost reference](/moose-inference/reference/cost/) — the full price table and signatures
 
 {/* test {"testId":"judge-cost","description":"Pricing resolution, prefix matching, and the inert-gate warning."} */}
 {/* step {"description":"A known model prices from the built-in table and a pinned variant resolves by longest prefix (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/cost-budget.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"pricing: { inputPerMTok: 3, outputPerMTok: 15 }"}} */}

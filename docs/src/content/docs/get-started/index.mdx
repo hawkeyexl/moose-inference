@@ -17,17 +17,17 @@ unusable, and which of the two layers you actually need.
 
 - **Node 24 or later.** Declared in `engines`. npm warns with `EBADENGINE` on an older version
   rather than refusing to install, so nothing stops you at install time. The library itself then
-  [warns once](/inference/reference/warnings/) on first use — at `makeProvider` or
+  [warns once](/moose-inference/reference/warnings/) on first use — at `makeProvider` or
   `completeValidatedJSON` — naming the version you are on. It does not refuse to run: nothing here
   uses a Node-24-only API, so 24 is the support floor rather than a hard one. Treat either warning
   as an error.
 - **ESM only.** The `exports` map exposes an `import` condition and no `require` one.
 
-`require("@hawkeyexl/inference")` therefore fails with **`ERR_PACKAGE_PATH_NOT_EXPORTED`** on every
+`require("moose-inference")` therefore fails with **`ERR_PACKAGE_PATH_NOT_EXPORTED`** on every
 Node version. From CommonJS, use a dynamic import instead — that works:
 
 ```js
-const { completeValidatedJSON } = await import("@hawkeyexl/inference");
+const { completeValidatedJSON } = await import("moose-inference");
 ```
 
 If either constraint is a problem, better to know now than after writing code.
@@ -35,10 +35,10 @@ If either constraint is a problem, better to know now than after writing code.
 ## Install
 
 ```bash
-npm install @hawkeyexl/inference
+npm install moose-inference
 ```
 
-Three runtime dependencies come with it. Local models need [one more](/inference/local/), and it is
+Three runtime dependencies come with it. Local models need [one more](/moose-inference/local/), and it is
 an optional peer dependency you install only if you want it.
 
 ## Make a call
@@ -64,7 +64,7 @@ failed.error: Response failed schema validation:  must have required property 's
 ```
 
 <Aside type="tip" title="This sample is executed in CI">
-  Every runnable sample in these docs lives in [`examples/`](https://github.com/hawkeyexl/inference/tree/main/examples),
+  Every runnable sample in these docs lives in [`examples/`](https://github.com/hawkeyexl/moose-inference/tree/main/examples),
   is rendered onto the page from that file, and is run on every pull request. A page cannot drift
   from the code it shows.
 </Aside>
@@ -95,7 +95,7 @@ including the judge layer's refusal to auto-pass an ensemble containing an error
 <Aside type="caution" title="Operational failures are different">
   A *model* failure lands on `run.error`. An *operational* failure — a missing API key, an unknown
   provider name — is thrown as `InferenceError`. Two classes, two handling paths. See
-  [choosing a provider](/inference/get-started/choose-a-provider/).
+  [choosing a provider](/moose-inference/get-started/choose-a-provider/).
 </Aside>
 
 ## What comes back
@@ -112,7 +112,7 @@ including the judge layer's refusal to auto-pass an ensemble containing an error
 | `usage` | `TokenUsage \| undefined` | Absent when the provider does not report it |
 | `durationMs` | `number` | Wall-clock for the run |
 
-Full signatures are in the [completion reference](/inference/reference/completion/).
+Full signatures are in the [completion reference](/moose-inference/reference/completion/).
 
 ## Which layer do you need?
 
@@ -120,13 +120,13 @@ Everything exports from the package root, but the two layers are independent.
 
 | You want to… | Use | Start at |
 |---|---|---|
-| Get one structured object per subject | **Completion** only | [Structured extraction](/inference/extract/) |
-| Turn N model opinions into a defensible decision | **Judge**, built on completion | [Judge & consensus](/inference/judge/) |
-| Run with no API key at all | Either, with a local provider | [Run models locally](/inference/local/) |
+| Get one structured object per subject | **Completion** only | [Structured extraction](/moose-inference/extract/) |
+| Turn N model opinions into a defensible decision | **Judge**, built on completion | [Judge & consensus](/moose-inference/judge/) |
+| Run with no API key at all | Either, with a local provider | [Run models locally](/moose-inference/local/) |
 
 ## Next
 
-Point the same call at a real model: [choose a provider](/inference/get-started/choose-a-provider/).
+Point the same call at a real model: [choose a provider](/moose-inference/get-started/choose-a-provider/).
 
 {/* Doc Detective inline tests. Each step is a one-line launcher that runs a real file from
     examples/; the step's `stdio` field carries the assertion. A sample cannot be inlined —

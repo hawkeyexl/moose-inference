@@ -11,7 +11,7 @@ import {
   resolveLlamaModelRef,
   tierForBudget,
   uriForTier,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 // Decimal GB, matching how the catalog and the library's own download notice report sizes.
 const GB = 1_000_000_000;

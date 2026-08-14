@@ -9,7 +9,7 @@ import { Aside } from '@astrojs/starlight/components';
 
 The validate-and-retry wrapper around a provider call.
 
-For using it, see [structured extraction](/inference/extract/).
+For using it, see [structured extraction](/moose-inference/extract/).
 
 ## `completeValidatedJSON`
 
@@ -47,7 +47,7 @@ interface CompleteValidatedOptions {
 
 <Aside type="tip" title="Why schema and validate are separate">
   Ask the model for exactly the fields you need while accepting anything legal. See the
-  [two-schemas pattern](/inference/extract/#two-schemas-one-call).
+  [two-schemas pattern](/moose-inference/extract/#two-schemas-one-call).
 </Aside>
 
 ## `InferenceRun`
@@ -83,7 +83,7 @@ identity**.
 <Aside type="caution" title="Identity, not deep equality">
   Two structurally identical schema objects are two cache entries. A builder that returns a fresh
   object per call recompiles Ajv every time — memoize it. See
-  [the performance trap](/inference/extract/#the-performance-trap).
+  [the performance trap](/moose-inference/extract/#the-performance-trap).
 </Aside>
 
 A **fresh Ajv instance** is created per distinct schema object, deliberately: two
@@ -98,7 +98,7 @@ equal-but-distinct schemas sharing an `$id` would otherwise collide in a shared 
 <Aside type="caution" title="Only the successful attempt's usage is carried">
   A request that failed on the first attempt and succeeded on the retry reports usage for **one**
   attempt. The failed attempt's input tokens never reach a budget gate, so a ceiling built on this
-  number is soft. See [cost and budgets](/inference/judge/cost-and-budgets/).
+  number is soft. See [cost and budgets](/moose-inference/judge/cost-and-budgets/).
 </Aside>
 
 ## Source of truth

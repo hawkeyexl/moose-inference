@@ -1,5 +1,5 @@
 {
-  "name": "@hawkeyexl/inference",
+  "name": "moose-inference",
   "version": "0.3.0",
   "description": "Shared TypeScript LLM inference layer: schema-constrained completion across Anthropic, OpenAI-compatible, Claude CLI, and in-process local llama.cpp providers, with caching, cost accounting, and an LLM-as-judge ensemble.",
   "type": "module",
@@ -18,11 +18,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hawkeyexl/inference.git"
+    "url": "git+https://github.com/hawkeyexl/moose-inference.git"
   },
-  "homepage": "https://github.com/hawkeyexl/inference#readme",
+  "homepage": "https://github.com/hawkeyexl/moose-inference#readme",
   "bugs": {
-    "url": "https://github.com/hawkeyexl/inference/issues"
+    "url": "https://github.com/hawkeyexl/moose-inference/issues"
   },
   "publishConfig": {
     "access": "public"

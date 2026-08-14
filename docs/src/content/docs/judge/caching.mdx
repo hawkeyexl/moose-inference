@@ -10,7 +10,7 @@ import cacheReplay from '@examples/cache-replay.mjs?raw';
 
 Turn a second run over unchanged input into a free replay.
 
-Signatures and the on-disk format are in the [cache reference](/inference/reference/cache/).
+Signatures and the on-disk format are in the [cache reference](/moose-inference/reference/cache/).
 
 ## You own the key
 
@@ -64,7 +64,7 @@ const cacheKey = buildCacheKey([
 <Aside type="tip" title="Get the identity without a key">
   `provider.provider()` and `provider.modelName()` need a constructed provider. If you want the key
   before deciding whether to call out at all, use
-  [`resolveProviderIdentity`](/inference/get-started/choose-a-provider/) instead — then a fully
+  [`resolveProviderIdentity`](/moose-inference/get-started/choose-a-provider/) instead — then a fully
   cached run never needs a credential.
 </Aside>
 
@@ -148,12 +148,12 @@ That comment is a scar from a real repository. A command run from a subdirectory
 
 Replayed runs come back flagged `cached: true`, and `costOfRuns` skips them. That is why the sample
 above prints `0.000000` for the second run. See
-[cost and budgets](/inference/judge/cost-and-budgets/).
+[cost and budgets](/moose-inference/judge/cost-and-budgets/).
 
 ## Next
 
-- [Cost and budgets](/inference/judge/cost-and-budgets/) — what a cached run does to your ceiling
-- [Upgrading](/inference/keep-it-working/upgrading/) — what invalidates entries across a version bump
+- [Cost and budgets](/moose-inference/judge/cost-and-budgets/) — what a cached run does to your ceiling
+- [Upgrading](/moose-inference/keep-it-working/upgrading/) — what invalidates entries across a version bump
 
 {/* test {"testId":"judge-caching","description":"Cache replay: cached flags, call count, verdict stability, and zero replay cost."} */}
 {/* step {"description":"The first run misses and the second replays entirely from disk (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/cache-replay.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"first cached flags: [ false, false, false ]"}} */}

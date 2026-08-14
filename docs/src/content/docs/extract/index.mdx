@@ -13,7 +13,7 @@ One call, one subject, one schema-valid object — or an honest failure.
 This is the completion layer on its own. **You do not need the judge layer for any of this**, and
 nothing on this page assumes it exists.
 
-Signatures are in the [completion reference](/inference/reference/completion/).
+Signatures are in the [completion reference](/moose-inference/reference/completion/).
 
 ## The guarantee to build on
 
@@ -98,7 +98,7 @@ Check `run.error`, not a `try`/`catch`. A model failure never throws.
 <Aside type="note" title="Operational failures do throw">
   A missing API key or an unknown provider name is an `InferenceError`, thrown at construction.
   Catch that at your boundary and translate it into your own error type — see
-  [budgets and errors](/inference/extract/budgets-and-errors/).
+  [budgets and errors](/moose-inference/extract/budgets-and-errors/).
 </Aside>
 
 ## Options worth knowing
@@ -122,10 +122,10 @@ Check `run.error`, not a `try`/`catch`. A model failure never throws.
 
 ## Next
 
-- Stay inside a cost ceiling and fail soft → [Budgets and errors](/inference/extract/budgets-and-errors/)
-- Shell out cross-platform → [The subprocess seam](/inference/extract/subprocess-seam/)
-- Cache repeat calls → [Caching](/inference/judge/caching/) (the mechanics are layer-independent)
-- Test it all offline → [Testing your integration](/inference/keep-it-working/testing/)
+- Stay inside a cost ceiling and fail soft → [Budgets and errors](/moose-inference/extract/budgets-and-errors/)
+- Shell out cross-platform → [The subprocess seam](/moose-inference/extract/subprocess-seam/)
+- Cache repeat calls → [Caching](/moose-inference/judge/caching/) (the mechanics are layer-independent)
+- Test it all offline → [Testing your integration](/moose-inference/keep-it-working/testing/)
 
 {/* test {"testId":"extract-once","description":"Single-shot extraction: narrow request schema, wide validation schema, memoized builder."} */}
 {/* step {"description":"Each document gets a validated proposal back (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/extract-once.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"auth.md: { title: 'Authentication', type: 'how-to' }"}} */}

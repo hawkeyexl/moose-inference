@@ -1,7 +1,7 @@
 // Single-shot structured extraction: a narrow request schema, a wider validation schema.
 // Runs with no API key: MockProvider stands in for a real provider.
 
-import { MockProvider, completeValidatedJSON, validatorFor } from "@hawkeyexl/inference";
+import { MockProvider, completeValidatedJSON, validatorFor } from "moose-inference";
 
 // Every field this tool knows how to fill.
 const ALL_FIELDS = { title: { type: "string" }, type: { type: "string" }, owner: { type: "string" } };

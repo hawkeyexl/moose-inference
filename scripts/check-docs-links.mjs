@@ -17,7 +17,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 
 const DIST = path.join("docs", "dist");
-const BASE = "/inference";
+const BASE = "/moose-inference";
 
 function walk(dir, out = []) {
   let entries;

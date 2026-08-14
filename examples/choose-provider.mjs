@@ -7,7 +7,7 @@ import {
   InferenceError,
   makeProvider,
   resolveProviderIdentity,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 // Cache keys and price lookups need the provider's identity. They do not need a client,
 // and a fully-cached run should not demand an API key. resolveProviderIdentity constructs

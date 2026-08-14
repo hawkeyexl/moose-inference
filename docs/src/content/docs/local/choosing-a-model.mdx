@@ -12,7 +12,7 @@ What `auto` picks, how to override it, and what stops working once a grammar is 
 constraining.
 
 The full catalog and signatures are in the
-[local models reference](/inference/reference/local-models/).
+[local models reference](/moose-inference/reference/local-models/).
 
 ## What you can pass as `model`
 
@@ -90,7 +90,7 @@ the detail that protects it.
   scores. Two findings are worth carrying: measured quality barely tracks file size across most of
   the range, and the failure that actually bites is a model generating until it times out instead
   of closing the JSON. The tiers buy latency and headroom, not a linear quality gain. See
-  [ADR 01009](https://github.com/hawkeyexl/ts-inference/blob/main/adrs/01009-retier-the-local-model-catalog-by-measurement.md).
+  [ADR 01009](https://github.com/hawkeyexl/moose-inference/blob/main/adrs/01009-retier-the-local-model-catalog-by-measurement.md).
 </Aside>
 
 ## What changes under a grammar
@@ -106,7 +106,7 @@ that works against Anthropic can behave differently here:
    prompt instead, so descriptions still steer the model — they just arrive by a different route.
 
 None of these affect the built-in `VERDICT_SCHEMA`, which requires all of its fields. They matter if
-you wrote your own — see [custom verdict schema](/inference/judge/verdict-schema/).
+you wrote your own — see [custom verdict schema](/moose-inference/judge/verdict-schema/).
 
 ## Thinking is off by default
 
@@ -124,8 +124,8 @@ If local output looks worse than you expected, check this before blaming the mod
 
 ## Next
 
-- [Manage model files](/inference/local/managing-model-files/) — where weights live, and reclaiming disk
-- [Local models reference](/inference/reference/local-models/) — the full catalog and every export
+- [Manage model files](/moose-inference/local/managing-model-files/) — where weights live, and reclaiming disk
+- [Local models reference](/moose-inference/reference/local-models/) — the full catalog and every export
 
 {/* test {"testId":"local-catalog","description":"Catalog inspection, tier selection by memory budget, and pinned blob paths."} */}
 {/* step {"description":"The catalog reports sizes and licenses matching the table on the page (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-catalog.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"granite-4.1-3b-q2   1.41 GB  Apache-2.0  tier=fast"}} */}

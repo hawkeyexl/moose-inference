@@ -8,7 +8,7 @@ import {
   costOfUsage,
   makeProvider,
   pricingFor,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 // Your CLI's own error type. Your fail() handler maps this to an exit code —
 // and only this, which is why a foreign error type must never escape.

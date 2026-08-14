@@ -14,7 +14,7 @@ import {
   pricingFor,
   runEnsemble,
   sha256,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 const cacheDir = mkdtempSync(join(tmpdir(), "inference-example-"));
 

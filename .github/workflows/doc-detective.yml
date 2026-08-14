@@ -54,7 +54,7 @@ jobs:
           NODE_LLAMA_CPP_SKIP_DOWNLOAD: "true"
           NODE_LLAMA_CPP_POSTINSTALL: skip
 
-      # examples/*.mjs resolve "@hawkeyexl/inference" to dist/index.js by self-reference.
+      # examples/*.mjs resolve "moose-inference" to dist/index.js by self-reference.
       - run: npm run build
 
       - name: Run documentation tests

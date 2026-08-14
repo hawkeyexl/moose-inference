@@ -26,7 +26,7 @@ class InferenceError extends Error {
   unavailable.
 
 **A model failure is never thrown.** It is recorded on `run.error`. Two classes, two handling paths —
-see [budgets and errors](/inference/extract/budgets-and-errors/).
+see [budgets and errors](/moose-inference/extract/budgets-and-errors/).
 
 Catch it at your boundary and translate it into your own error type, or your CLI's exit-code mapping
 will not recognise it.
@@ -39,74 +39,74 @@ Everything below exports from the package root. 36 types, 52 values.
 
 | Type | Documented in |
 |---|---|
-| `InferenceProvider` | [Providers](/inference/reference/providers/#the-contract) |
-| `CompleteJSONRequest` | [Providers](/inference/reference/providers/#the-contract) |
-| `CompleteJSONResponse` | [Providers](/inference/reference/providers/#the-contract) |
-| `TokenUsage` | [Providers](/inference/reference/providers/#the-contract) |
+| `InferenceProvider` | [Providers](/moose-inference/reference/providers/#the-contract) |
+| `CompleteJSONRequest` | [Providers](/moose-inference/reference/providers/#the-contract) |
+| `CompleteJSONResponse` | [Providers](/moose-inference/reference/providers/#the-contract) |
+| `TokenUsage` | [Providers](/moose-inference/reference/providers/#the-contract) |
 
 ### Provider configuration
 
 | Type | Documented in |
 |---|---|
-| `ProviderSpec` | [Providers](/inference/reference/providers/#providerspec) |
-| `ProviderName` | [Providers](/inference/reference/providers/#providerspec) |
-| `ProviderSelector` | [Providers](/inference/reference/providers/#providerspec) |
-| `ProviderIdentity` | [Providers](/inference/reference/providers/#factories) |
-| `AnthropicProviderOptions` | [Providers](/inference/reference/providers/#per-provider-options) |
-| `OpenAICompatProviderOptions` | [Providers](/inference/reference/providers/#per-provider-options) |
-| `LlamaCppProviderOptions` | [Local models](/inference/reference/local-models/#llamacppprovider) |
-| `MockResponse` | [Providers](/inference/reference/providers/#mock) |
+| `ProviderSpec` | [Providers](/moose-inference/reference/providers/#providerspec) |
+| `ProviderName` | [Providers](/moose-inference/reference/providers/#providerspec) |
+| `ProviderSelector` | [Providers](/moose-inference/reference/providers/#providerspec) |
+| `ProviderIdentity` | [Providers](/moose-inference/reference/providers/#factories) |
+| `AnthropicProviderOptions` | [Providers](/moose-inference/reference/providers/#per-provider-options) |
+| `OpenAICompatProviderOptions` | [Providers](/moose-inference/reference/providers/#per-provider-options) |
+| `LlamaCppProviderOptions` | [Local models](/moose-inference/reference/local-models/#llamacppprovider) |
+| `MockResponse` | [Providers](/moose-inference/reference/providers/#mock) |
 
 ### Completion
 
 | Type | Documented in |
 |---|---|
-| `CompleteValidatedOptions` | [Completion](/inference/reference/completion/#completevalidatedoptions) |
-| `InferenceRun` | [Completion](/inference/reference/completion/#inferencerun) |
+| `CompleteValidatedOptions` | [Completion](/moose-inference/reference/completion/#completevalidatedoptions) |
+| `InferenceRun` | [Completion](/moose-inference/reference/completion/#inferencerun) |
 
 ### Judge
 
 | Type | Documented in |
 |---|---|
-| `EnsembleOptions` | [Judge](/inference/reference/judge/#ensembleoptions) |
-| `JudgeRun` | [Judge](/inference/reference/judge/#judgerun-and-judgeverdict) |
-| `JudgeVerdict` | [Judge](/inference/reference/judge/#judgerun-and-judgeverdict) |
-| `ConsensusResult` | [Judge](/inference/reference/judge/#computeconsensus) |
-| `Match` | [Judge](/inference/reference/judge/#judgerun-and-judgeverdict) |
-| `Zone` | [Judge](/inference/reference/judge/#zonefor) |
-| `ZoneThresholds` | [Judge](/inference/reference/judge/#zonefor) |
+| `EnsembleOptions` | [Judge](/moose-inference/reference/judge/#ensembleoptions) |
+| `JudgeRun` | [Judge](/moose-inference/reference/judge/#judgerun-and-judgeverdict) |
+| `JudgeVerdict` | [Judge](/moose-inference/reference/judge/#judgerun-and-judgeverdict) |
+| `ConsensusResult` | [Judge](/moose-inference/reference/judge/#computeconsensus) |
+| `Match` | [Judge](/moose-inference/reference/judge/#judgerun-and-judgeverdict) |
+| `Zone` | [Judge](/moose-inference/reference/judge/#zonefor) |
+| `ZoneThresholds` | [Judge](/moose-inference/reference/judge/#zonefor) |
 
 ### Cost
 
 | Type | Documented in |
 |---|---|
-| `Pricing` | [Cost](/inference/reference/cost/#pricing) |
+| `Pricing` | [Cost](/moose-inference/reference/cost/#pricing) |
 
 ### Subprocess
 
 | Type | Documented in |
 |---|---|
-| `ExecFn` | [Exec](/inference/reference/exec/#execfn) |
-| `ExecOptions` | [Exec](/inference/reference/exec/#execoptions) |
-| `ExecResult` | [Exec](/inference/reference/exec/#execresult) |
+| `ExecFn` | [Exec](/moose-inference/reference/exec/#execfn) |
+| `ExecOptions` | [Exec](/moose-inference/reference/exec/#execoptions) |
+| `ExecResult` | [Exec](/moose-inference/reference/exec/#execresult) |
 
 ### Local models
 
 | Type | Documented in |
 |---|---|
-| `LlamaModelEntry` | [Local models](/inference/reference/local-models/#the-catalog) |
-| `LlamaTier` | [Local models](/inference/reference/local-models/#selectors-and-tiers) |
-| `LlamaSelector` | [Local models](/inference/reference/local-models/#selectors-and-tiers) |
-| `LlamaRuntime` | [Local models](/inference/reference/local-models/#the-runtime-seam) |
-| `LlamaLoadedModel` | [Local models](/inference/reference/local-models/#the-runtime-seam) |
-| `LlamaSession` | [Local models](/inference/reference/local-models/#the-runtime-seam) |
-| `LlamaPromptOptions` | [Local models](/inference/reference/local-models/#the-runtime-seam) |
-| `LlamaPromptResult` | [Local models](/inference/reference/local-models/#the-runtime-seam) |
-| `ClearLlamaModelsOptions` | [Local models](/inference/reference/local-models/#model-files-on-disk) |
-| `ClearLlamaModelsResult` | [Local models](/inference/reference/local-models/#model-files-on-disk) |
-| `ClearedModelFile` | [Local models](/inference/reference/local-models/#model-files-on-disk) |
+| `LlamaModelEntry` | [Local models](/moose-inference/reference/local-models/#the-catalog) |
+| `LlamaTier` | [Local models](/moose-inference/reference/local-models/#selectors-and-tiers) |
+| `LlamaSelector` | [Local models](/moose-inference/reference/local-models/#selectors-and-tiers) |
+| `LlamaRuntime` | [Local models](/moose-inference/reference/local-models/#the-runtime-seam) |
+| `LlamaLoadedModel` | [Local models](/moose-inference/reference/local-models/#the-runtime-seam) |
+| `LlamaSession` | [Local models](/moose-inference/reference/local-models/#the-runtime-seam) |
+| `LlamaPromptOptions` | [Local models](/moose-inference/reference/local-models/#the-runtime-seam) |
+| `LlamaPromptResult` | [Local models](/moose-inference/reference/local-models/#the-runtime-seam) |
+| `ClearLlamaModelsOptions` | [Local models](/moose-inference/reference/local-models/#model-files-on-disk) |
+| `ClearLlamaModelsResult` | [Local models](/moose-inference/reference/local-models/#model-files-on-disk) |
+| `ClearedModelFile` | [Local models](/moose-inference/reference/local-models/#model-files-on-disk) |
 
-`JsonCache` is a class, not a type — see [Cache](/inference/reference/cache/#jsoncache).
+`JsonCache` is a class, not a type — see [Cache](/moose-inference/reference/cache/#jsoncache).
 
 ## Source of truth
 

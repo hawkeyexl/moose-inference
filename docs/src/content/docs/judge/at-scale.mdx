@@ -48,7 +48,7 @@ Three details in that code are easy to get wrong:
 ## The budget gate under concurrency
 
 <Aside type="danger" title="Concurrency widens the overshoot bound">
-  [Budgets and errors](/inference/extract/budgets-and-errors/#your-ceiling-is-soft-in-three-ways)
+  [Budgets and errors](/moose-inference/extract/budgets-and-errors/#your-ceiling-is-soft-in-three-ways)
   states that gating before each call bounds the overshoot to one call. **That is a property of
   sequential iteration, not of the gate.**
 </Aside>
@@ -74,10 +74,10 @@ a hard ceiling.
 This is the consequence that surprises people, and it follows from two rules already documented
 separately.
 
-1. A rate limit is [recorded on `run.error`](/inference/reference/errors/) like any other provider
+1. A rate limit is [recorded on `run.error`](/moose-inference/reference/errors/) like any other provider
    failure. It does not throw.
 2. Any errored run in an ensemble
-   [forces `human-review`](/inference/judge/#the-exact-boundaries).
+   [forces `human-review`](/moose-inference/judge/#the-exact-boundaries).
 
 Therefore: **a rate limit does not surface as a rate limit. It surfaces as a growing human-review
 queue.**
@@ -105,7 +105,7 @@ signal.
 
 If you want diversity, prefer more runs to a higher temperature. Independent samples at temperature
 0 are already independent, and raising temperature
-[warns for a reason](/inference/reference/warnings/).
+[warns for a reason](/moose-inference/reference/warnings/).
 
 ## Estimating a run
 
@@ -122,9 +122,9 @@ estimate than any number this page could print, and it costs one call.
 
 ## Next
 
-- [Caching](/inference/judge/caching/) — the cheapest call is the one you do not make
-- [Budgets and errors](/inference/extract/budgets-and-errors/) — the sequential statement of the gate
-- [Wire it into a CLI](/inference/extract/cli-integration/) — statuses and exit codes around this loop
+- [Caching](/moose-inference/judge/caching/) — the cheapest call is the one you do not make
+- [Budgets and errors](/moose-inference/extract/budgets-and-errors/) — the sequential statement of the gate
+- [Wire it into a CLI](/moose-inference/extract/cli-integration/) — statuses and exit codes around this loop
 
 {/* test {"testId":"orchestrate-concurrency","description":"A bounded pool across subjects, order preservation, and the budget overshoot that concurrency introduces."} */}
 {/* step {"description":"The sequential run stops exactly at the ceiling.","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/orchestrate-concurrency.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"sequential:   spent $0.045"}} */}

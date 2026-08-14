@@ -8,7 +8,7 @@ import {
   makeProvider,
   makeProviderAsync,
   mockVerdict,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 const system = "You evaluate whether a page satisfies an assertion.";
 const user = "# Assertion\nThe page documents authentication.\n\n# Page\nUse a bearer token.";

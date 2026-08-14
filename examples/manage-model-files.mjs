@@ -10,7 +10,7 @@ import {
   clearLlamaModels,
   defaultLlamaModelsDirectory,
   isModelDownloaded,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 // Weights live in this library's OWN directory, not node-llama-cpp's shared one,
 // so clearing can never destroy models something else downloaded.

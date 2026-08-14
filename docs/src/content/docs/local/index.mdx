@@ -49,7 +49,7 @@ Two things, and neither announces itself:
 
 - **Your budget gate goes inert.** Covered below.
 - **Four schema behaviors change** under grammar-constrained decoding. Covered in
-  [choosing a model](/inference/local/choosing-a-model/).
+  [choosing a model](/moose-inference/local/choosing-a-model/).
 
 ## Why selectors need the async factory
 
@@ -96,7 +96,7 @@ const pricing = pricingFor(provider.modelName());
 if (pricing !== undefined && spent >= maxCostUsd) break;
 ```
 
-See [cost and budgets](/inference/judge/cost-and-budgets/).
+See [cost and budgets](/moose-inference/judge/cost-and-budgets/).
 
 ## Testing without weights
 
@@ -109,7 +109,7 @@ await makeProviderAsync({ provider: "llama-cpp", llamaRuntime: myFakeRuntime });
 
 Omit `llamaRuntime` in real use and the default runtime downloads and loads real weights. The sample
 above uses a fake, which is why it runs in CI. See
-[testing your integration](/inference/keep-it-working/testing/).
+[testing your integration](/moose-inference/keep-it-working/testing/).
 
 ## Long-lived processes
 
@@ -118,8 +118,8 @@ long-running process, `disposeLlamaModels()` frees them.
 
 ## Next
 
-- [Choose a model](/inference/local/choosing-a-model/) — what `auto` picks, and what changes under a grammar
-- [Manage model files](/inference/local/managing-model-files/) — where weights live and how to reclaim the disk
+- [Choose a model](/moose-inference/local/choosing-a-model/) — what `auto` picks, and what changes under a grammar
+- [Manage model files](/moose-inference/local/managing-model-files/) — where weights live and how to reclaim the disk
 
 {/* test {"testId":"local-provider","description":"The llama-cpp provider driven through an injected runtime: selector refusal, async resolution, and an unchanged judge call."} */}
 {/* step {"description":"The synchronous factory refuses an unresolved selector and names the async twin (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/local-provider.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"sync factory refused: true"}} */}

@@ -12,7 +12,7 @@ import {
   makeProvider,
   makeProviderAsync,
   mockVerdict,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 // ---------------------------------------------------------------------------
 // Class 1 — operational. Thrown as InferenceError, at construction.

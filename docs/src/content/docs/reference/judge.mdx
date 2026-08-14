@@ -9,7 +9,7 @@ import { Aside } from '@astrojs/starlight/components';
 
 The ensemble, the consensus math, and the zone routing.
 
-For using them, see [judge and consensus](/inference/judge/).
+For using them, see [judge and consensus](/moose-inference/judge/).
 
 ## `judge`
 
@@ -46,7 +46,7 @@ interface EnsembleOptions {
 <Aside type="tip" title="schema is the per-consumer override">
   Supply your own verdict schema to word its field descriptions for your domain. Descriptions are
   prompt surface and measurably steer the model. See
-  [custom verdict schema](/inference/judge/verdict-schema/).
+  [custom verdict schema](/moose-inference/judge/verdict-schema/).
 </Aside>
 
 The cache is consulted only when **both** `cache` and `cacheKey` are given. A hit that is not an
@@ -78,7 +78,7 @@ interface JudgeVerdict {
 <Aside type="danger" title="JudgeRun is a file format">
   It is persisted to consumers' on-disk caches. Renaming or removing a field invalidates every
   cached ensemble in every consuming repository. Changes carry a `BREAKING CHANGE:` footer. See
-  [upgrading](/inference/keep-it-working/upgrading/).
+  [upgrading](/moose-inference/keep-it-working/upgrading/).
 </Aside>
 
 `JudgeRun` uses `verdict` where `InferenceRun` uses `result`; `runEnsemble` maps between them at the

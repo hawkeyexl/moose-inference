@@ -1,6 +1,6 @@
 # Claude Code Configuration
 
-Repo-wide guidance for AI agents working on `@hawkeyexl/inference`. Conventions here are ported
+Repo-wide guidance for AI agents working on `moose-inference`. Conventions here are ported
 from the sibling repos (docevals, dockg, agentevals, docmeta), which in turn follow
 [doc-detective](https://github.com/doc-detective/doc-detective)'s repo guidance.
 

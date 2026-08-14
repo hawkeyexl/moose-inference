@@ -51,7 +51,7 @@ each time with no shared state. If you want diversity, more runs beats more rand
 
 Fires when a cache write fails — a read-only workspace, a full disk, a permissions problem. The run
 continues, because [the cache is an optimization, never a
-dependency](/inference/judge/caching/#a-write-failure-never-aborts-a-run).
+dependency](/moose-inference/judge/caching/#a-write-failure-never-aborts-a-run).
 
 <Aside type="caution" title="This one is per instance, not per process">
   Two `JsonCache` objects pointing at the same broken directory warn twice. That is deliberate — a
@@ -105,7 +105,7 @@ import {
   resetNodeVersionWarning,
   resetProviderDetectionWarning,
   resetTemperatureWarning,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 beforeEach(() => {
   resetNodeVersionWarning();

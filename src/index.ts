@@ -1,5 +1,5 @@
 /**
- * Public API for @hawkeyexl/inference.
+ * Public API for moose-inference.
  *
  * One entry point covers both layers: schema-constrained completion (the
  * provider contract, the four providers, cache, cost, retry) and the

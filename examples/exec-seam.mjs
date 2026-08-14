@@ -1,7 +1,7 @@
 // The subprocess seam, used for a command that has nothing to do with inference.
 // Runs with no API key and no network — it spawns this same Node binary.
 
-import { makeProvider, realExec } from "@hawkeyexl/inference";
+import { makeProvider, realExec } from "moose-inference";
 
 // An argv array, never a shell string. No quoting hazards, no injection surface.
 const version = await realExec([process.execPath, "--version"]);

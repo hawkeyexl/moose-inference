@@ -11,7 +11,7 @@ import detectProvider from '@examples/detect-provider.mjs?raw';
 
 Pick among five providers and configure the one you chose — or let the library pick for you.
 
-Full option tables are in the [providers reference](/inference/reference/providers/); this page is
+Full option tables are in the [providers reference](/moose-inference/reference/providers/); this page is
 about making the decision.
 
 ## Or don't choose
@@ -83,14 +83,14 @@ One part of the choice *is* consequential, and it is the easiest column to skim 
   `claude-cli` reports no token usage. `costOfUsage` and `costOfRuns` therefore yield `0`, and **any
   budget gate over it is inert** — not satisfied, inert. Choosing `claude-cli` because it needs no
   API key also means giving up cost accounting. The same applies to local models, for the same
-  reason: see [cost and budgets](/inference/judge/cost-and-budgets/).
+  reason: see [cost and budgets](/moose-inference/judge/cost-and-budgets/).
 </Aside>
 
 ## The spec
 
 Map your own config into `ProviderSpec` rather than passing your config object through. The
 library owns this shape so it does not have to know anything about yours — see
-[ADR 01000](https://github.com/hawkeyexl/inference/blob/main/adrs/01000-library-owned-provider-spec.md).
+[ADR 01000](https://github.com/hawkeyexl/moose-inference/blob/main/adrs/01000-library-owned-provider-spec.md).
 
 ```ts
 interface ProviderSpec {
@@ -173,18 +173,18 @@ Reports no usage. See the caution above.
 ### `llama-cpp`
 
 Needs `makeProviderAsync` whenever the model is a selector like `auto`, because resolving one reads
-GPU memory. Start at [run models locally](/inference/local/).
+GPU memory. Start at [run models locally](/moose-inference/local/).
 
 ### `mock`
 
 Not just for tests — it is the fastest way to develop against this package before choosing anything.
-See [testing your integration](/inference/keep-it-working/testing/).
+See [testing your integration](/moose-inference/keep-it-working/testing/).
 
 ## Next
 
-- Building a judge → [Judge & consensus](/inference/judge/)
-- Building extraction → [Structured extraction](/inference/extract/)
-- No credential available → [Run models locally](/inference/local/)
+- Building a judge → [Judge & consensus](/moose-inference/judge/)
+- Building extraction → [Structured extraction](/moose-inference/extract/)
+- No credential available → [Run models locally](/moose-inference/local/)
 
 {/* test {"testId":"choose-a-provider","description":"Auto-detection ordering, provider identity resolution without construction, and the operational-failure boundary."} */}
 {/* step {"description":"Detection order is fixed and never includes mock, which would pass an unscripted empty result as real (1/2)","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/detect-provider.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"detection order: [ 'anthropic', 'openai', 'claude-cli', 'llama-cpp' ]"}} */}

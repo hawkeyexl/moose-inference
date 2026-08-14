@@ -1,6 +1,6 @@
 # Content strategy
 
-This directory holds the durable content strategy for the `@hawkeyexl/inference` documentation
+This directory holds the durable content strategy for the `moose-inference` documentation
 site: who the docs are for, what those readers must accomplish, and which page carries each
 outcome. It is the reference every writing task consults before drafting.
 

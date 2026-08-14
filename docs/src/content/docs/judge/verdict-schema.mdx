@@ -11,8 +11,8 @@ import customVerdictSchema from '@examples/custom-verdict-schema.mjs?raw';
 Wording the verdict in your own domain's language, and guarding the one contract the
 library cannot check for you.
 
-Running the ensemble is [judge and consensus](/inference/judge/). The canonical schema is in the
-[judge reference](/inference/reference/judge/#verdict_schema).
+Running the ensemble is [judge and consensus](/moose-inference/judge/). The canonical schema is in the
+[judge reference](/moose-inference/reference/judge/#verdict_schema).
 
 ## Why the seam exists
 
@@ -75,7 +75,7 @@ relationship between it and `JudgeVerdict`.
 Guard it yourself, in three lines, in your own test suite:
 
 ```ts
-import { MockProvider, runEnsemble } from "@hawkeyexl/inference";
+import { MockProvider, runEnsemble } from "moose-inference";
 import myVerdictSchema from "./my-verdict-schema.json" with { type: "json" };
 
 it("produces JudgeVerdict-shaped verdicts", async () => {
@@ -109,13 +109,13 @@ Grammar-constrained decoding changes four things, and a custom schema is where t
   prompt. Your wording still works — it arrives by a different route.
 
 None of these affect the canonical schema, which requires all its fields. They matter as soon as
-yours has optional ones. See [choosing a model](/inference/local/choosing-a-model/#what-changes-under-a-grammar).
+yours has optional ones. See [choosing a model](/moose-inference/local/choosing-a-model/#what-changes-under-a-grammar).
 
 ## Next
 
-- [Caching](/inference/judge/caching/) — put a schema version in your cache key
-- [Upgrading](/inference/keep-it-working/upgrading/) — what a schema change does to entries you already hold
-- [ADR 01001](https://github.com/hawkeyexl/inference/blob/main/adrs/01001-single-entry-point-and-canonical-verdict-schema.md) — the full reasoning
+- [Caching](/moose-inference/judge/caching/) — put a schema version in your cache key
+- [Upgrading](/moose-inference/keep-it-working/upgrading/) — what a schema change does to entries you already hold
+- [ADR 01001](https://github.com/hawkeyexl/moose-inference/blob/main/adrs/01001-single-entry-point-and-canonical-verdict-schema.md) — the full reasoning
 
 {/* test {"testId":"custom-verdict-schema","description":"The verdict-schema override seam, and the runtime-only shape contract."} */}
 {/* step {"description":"An override changes $id and descriptions while leaving the structure identical.","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/custom-verdict-schema.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"structure unchanged: true"}} */}

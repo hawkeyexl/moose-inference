@@ -12,7 +12,7 @@ Using this package's subprocess helper for your own commands, and injecting a fa
 tests never spawn anything.
 
 The only journey here that involves no model at all. Full signatures are in the
-[exec reference](/inference/reference/exec/).
+[exec reference](/moose-inference/reference/exec/).
 
 ## Why it is worth using
 
@@ -118,12 +118,12 @@ export async function currentCommit(repoRoot: string, exec: ExecFn = realExec) {
 ```
 
 Your unit test passes a fake and asserts on the argv without spawning anything. See
-[testing your integration](/inference/keep-it-working/testing/#execfn).
+[testing your integration](/moose-inference/keep-it-working/testing/#execfn).
 
 ## Next
 
-- [Exec reference](/inference/reference/exec/) — full signatures and defaults
-- [Testing your integration](/inference/keep-it-working/testing/) — all three seams together
+- [Exec reference](/moose-inference/reference/exec/) — full signatures and defaults
+- [Testing your integration](/moose-inference/keep-it-working/testing/) — all three seams together
 
 {/* test {"testId":"exec-seam","description":"realExec as a general-purpose subprocess helper: argv, stdin, env unsetting, timeouts, and the ExecFn seam."} */}
 {/* step {"description":"A command runs and its exit code and stdout are returned rather than thrown.","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/exec-seam.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"looks like a version: true"}} */}

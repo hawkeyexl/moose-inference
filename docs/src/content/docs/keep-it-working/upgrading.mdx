@@ -11,7 +11,7 @@ import cacheVersioning from '@examples/cache-versioning.mjs?raw';
 Upgrading without silently discarding a populated cache — or, worse, replaying entries that no
 longer mean what they meant.
 
-Composing a key in the first place is [caching](/inference/judge/caching/).
+Composing a key in the first place is [caching](/moose-inference/judge/caching/).
 
 ## The fact that makes this a journey
 
@@ -123,9 +123,9 @@ That is the async factory working as designed, not a cache bug. It is what stops
 
 ## Next
 
-- [Caching](/inference/judge/caching/) — key composition in full
-- [Cache reference](/inference/reference/cache/) — the on-disk format
-- [Custom verdict schema](/inference/judge/verdict-schema/) — the other thing that should bump your marker
+- [Caching](/moose-inference/judge/caching/) — key composition in full
+- [Cache reference](/moose-inference/reference/cache/) — the on-disk format
+- [Custom verdict schema](/moose-inference/judge/verdict-schema/) — the other thing that should bump your marker
 
 {/* test {"testId":"upgrading","description":"Cache-key versioning and the recheck-on-read wrapper that makes an upgrade survivable."} */}
 {/* step {"description":"An unchanged key replays from cache.","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/cache-versioning.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"same version replays: true"}} */}

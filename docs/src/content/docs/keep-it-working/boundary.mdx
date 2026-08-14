@@ -58,7 +58,7 @@ exist.
 
 **If you need behavior the contract does not offer** — say so upstream before working around it. The
 provider contract is deliberately narrow, and widening it
-[requires an ADR](https://github.com/hawkeyexl/inference/tree/main/adrs), but "deliberately narrow"
+[requires an ADR](https://github.com/hawkeyexl/moose-inference/tree/main/adrs), but "deliberately narrow"
 is not the same as "closed."
 
 **If it is domain-specific** — it is yours, and the library will not try to take it. There is no
@@ -71,16 +71,16 @@ Worth naming, because each is somewhere a reader expects the library to help and
 does not:
 
 1. **Prompts and their versioning.** Ship no prompt text, hold no `PROMPT_VERSION`. See
-   [caching](/inference/judge/caching/#you-own-the-key).
+   [caching](/moose-inference/judge/caching/#you-own-the-key).
 2. **Verdict wording.** The structure is the library's; the field descriptions are yours, and they
-   are [prompt surface](/inference/judge/verdict-schema/).
+   are [prompt surface](/moose-inference/judge/verdict-schema/).
 3. **Orchestration.** Concurrency, backoff, per-subject status. See
-   [running at scale](/inference/judge/at-scale/).
+   [running at scale](/moose-inference/judge/at-scale/).
 4. **Config mapping.** `ProviderSpec` is flat and library-owned so it never has to know about your
    config format. Map onto it; do not pass your config object through. See
-   [choosing a provider](/inference/get-started/choose-a-provider/#the-spec).
+   [choosing a provider](/moose-inference/get-started/choose-a-provider/#the-spec).
 
 ## Next
 
-- [Upgrading](/inference/keep-it-working/upgrading/) — what a version bump does to what you own
-- [Testing your integration](/inference/keep-it-working/testing/) — the seams for the parts you own
+- [Upgrading](/moose-inference/keep-it-working/upgrading/) — what a version bump does to what you own
+- [Testing your integration](/moose-inference/keep-it-working/testing/) — the seams for the parts you own

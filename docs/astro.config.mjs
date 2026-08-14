@@ -1,4 +1,4 @@
-// Starlight config for the @hawkeyexl/inference documentation site.
+// Starlight config for the moose-inference documentation site.
 //
 // The six sidebar sections are the CUJ-first tracks defined in
 // content-strategy/information_architecture/proposed-ia.md. Their order is fixed here;
@@ -18,10 +18,10 @@ const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 
 export default defineConfig({
   site: "https://hawkeyexl.github.io",
-  base: "/inference",
+  base: "/moose-inference",
   integrations: [
     starlight({
-      title: "@hawkeyexl/inference",
+      title: "moose-inference",
       // We author our own 404 at src/content/docs/404.md. Starlight's injected /404
       // route would render the same entry, and Astro then warns that the catch-all
       // `/[...slug]` conflicts with it. Disabling the injected route lets the catch-all
@@ -33,7 +33,7 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/hawkeyexl/inference",
+          href: "https://github.com/hawkeyexl/moose-inference",
         },
       ],
       sidebar: [

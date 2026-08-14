@@ -1,7 +1,7 @@
 // One schema-constrained call, and the failure branch beside it.
 // Runs with no API key: MockProvider stands in for a real provider.
 
-import { MockProvider, completeValidatedJSON } from "@hawkeyexl/inference";
+import { MockProvider, completeValidatedJSON } from "moose-inference";
 
 const schema = {
   type: "object",

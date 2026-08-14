@@ -1,7 +1,7 @@
 // An LLM-as-judge ensemble, and proof that an errored run can never pass silently.
 // Runs with no API key: MockProvider stands in for a real provider.
 
-import { MockProvider, judge, mockVerdict } from "@hawkeyexl/inference";
+import { MockProvider, judge, mockVerdict } from "moose-inference";
 
 const system = "You evaluate whether a page satisfies an assertion.";
 const user = "# Assertion\nThe page documents authentication.\n\n# Page\nUse a bearer token.";

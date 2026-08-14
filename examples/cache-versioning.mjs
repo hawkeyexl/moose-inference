@@ -11,7 +11,7 @@ import {
   buildCacheKey,
   mockVerdict,
   runEnsemble,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 const directory = mkdtempSync(join(tmpdir(), "inference-upgrade-"));
 

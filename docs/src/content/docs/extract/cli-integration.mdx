@@ -113,7 +113,7 @@ Sort the field set before hashing, or two orderings of the same fields become tw
 ```
 
 `2` is where a translated `InferenceError` lands, which is why
-[translating at the boundary](/inference/extract/budgets-and-errors/#translate-inferenceerror-at-the-boundary)
+[translating at the boundary](/moose-inference/extract/budgets-and-errors/#translate-inferenceerror-at-the-boundary)
 matters: an untranslated one escapes as a crash with the wrong code.
 
 `low-confidence` and `skipped-budget` are findings, not failures — the tool worked, the result needs
@@ -136,9 +136,9 @@ reproducibility, cache first and gate on a fixed subject list rather than on rem
 
 ## Next
 
-- [Running at scale](/inference/judge/at-scale/) — concurrency around this loop
-- [Caching](/inference/judge/caching/) — key composition and where the cache lives
-- [Budgets and errors](/inference/extract/budgets-and-errors/) — the two error classes
+- [Running at scale](/moose-inference/judge/at-scale/) — concurrency around this loop
+- [Caching](/moose-inference/judge/caching/) — key composition and where the cache lives
+- [Budgets and errors](/moose-inference/extract/budgets-and-errors/) — the two error classes
 
 {/* test {"testId":"cli-statuses","description":"Status enum, dry-run replay, confidence gating, and the budget interaction with a warm cache."} */}
 {/* step {"description":"A subject with nothing missing is completed without calling the model.","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/cli-statuses.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"complete        webhooks.md"}} */}

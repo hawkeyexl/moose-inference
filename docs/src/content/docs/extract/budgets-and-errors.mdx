@@ -11,7 +11,7 @@ import budgetAndDegrade from '@examples/budget-and-degrade.mjs?raw';
 Bounding what an optional feature can spend, and making sure nothing it does can take
 down the deterministic tool it lives inside.
 
-The pricing rules themselves are [cost and budgets](/inference/judge/cost-and-budgets/); this page
+The pricing rules themselves are [cost and budgets](/moose-inference/judge/cost-and-budgets/); this page
 is about wiring them into a CLI that has to keep working.
 
 ## Two failure classes
@@ -72,7 +72,7 @@ Checking afterwards means the overspend has already happened.
 <Aside type="danger" title="The pricing guard is not optional">
   Without `pricing !== undefined`, an unpriced model makes `spent` permanently `0` and the loop
   becomes unbounded. The gate is not satisfied — it is
-  [inert](/inference/judge/cost-and-budgets/#the-trap).
+  [inert](/moose-inference/judge/cost-and-budgets/#the-trap).
 </Aside>
 
 ## Your ceiling is soft, in three ways
@@ -85,13 +85,13 @@ The last two lines of the sample output are the point: **five calls were made, t
    `errors.md` cost real input tokens that never reached the total.
 3. **Concurrency widens the bound.** The loop above is sequential, so exactly one call can be in
    flight when the gate opens. Run subjects concurrently — which
-   [we recommend for ensembles](/inference/judge/at-scale/) — and up to *K* calls can clear the gate
+   [we recommend for ensembles](/moose-inference/judge/at-scale/) — and up to *K* calls can clear the gate
    before any of them adds to `spent`. The overshoot becomes K calls, not one.
 
 <Aside type="caution" title="Rule 1 and concurrency do not compose">
   The one-call bound is a property of sequential iteration, not of the gate. If you add a worker
   pool, recompute your headroom against the pool size. See
-  [running at scale](/inference/judge/at-scale/#the-budget-gate-under-concurrency).
+  [running at scale](/moose-inference/judge/at-scale/#the-budget-gate-under-concurrency).
 </Aside>
 
 Leave headroom. Treat the number as a bound with slack, not a measurement.
@@ -119,9 +119,9 @@ dropped and never coerced.**
 
 ## Next
 
-- [Cost and budgets](/inference/judge/cost-and-budgets/) — pricing resolution and the price table
-- [Cost reference](/inference/reference/cost/) — signatures
-- [Errors and type index](/inference/reference/errors-and-types/) — everything `InferenceError` covers
+- [Cost and budgets](/moose-inference/judge/cost-and-budgets/) — pricing resolution and the price table
+- [Cost reference](/moose-inference/reference/cost/) — signatures
+- [Errors and type index](/moose-inference/reference/errors-and-types/) — everything `InferenceError` covers
 
 {/* test {"testId":"budgets-and-errors","description":"Error translation, gating before the call, and the two ways the ceiling is soft."} */}
 {/* step {"description":"An operational failure is translated into the host CLI's own error type.","runCode":{"language":"javascript","code":"process.stdout.write(require('node:child_process').execFileSync('node',['examples/budget-and-degrade.mjs'],{encoding:'utf8',stdio:['ignore','pipe','inherit']}))","stdio":"translated: true"}} */}

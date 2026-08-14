@@ -97,7 +97,7 @@ breaking one.
   npm `EBADENGINE` warning. Stated as what it is.
 - **The ESM claim — which turned out to be right.** An audit reported that "`require()` will not
   work" was false, having tested `require('./dist/index.js')` — a *file path*, which bypasses the
-  `exports` map. The real consumer path fails: `require("@hawkeyexl/inference")` raises
+  `exports` map. The real consumer path fails: `require("moose-inference")` raises
   **`ERR_PACKAGE_PATH_NOT_EXPORTED`**, because `exports` declares `types` and `import` and no
   `require` condition. The claim stood; what was missing was the searchable error code and the fact
   that `await import()` from CommonJS *does* work. Correcting the "correction" is recorded here

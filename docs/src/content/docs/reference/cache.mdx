@@ -9,7 +9,7 @@ import { Aside } from '@astrojs/starlight/components';
 
 A content-addressed JSON cache, and the key-composition helpers.
 
-For using it, see [caching](/inference/judge/caching/).
+For using it, see [caching](/moose-inference/judge/caching/).
 
 ## `JsonCache`
 
@@ -33,7 +33,7 @@ unparseable. **A corrupt entry is a miss, never a crash.**
 <Aside type="caution" title="It cannot validate your value shape">
   `JsonCache` deliberately does not know what you store, so a well-formed but *obsolete* entry —
   written by an older version of your own schema — replays happily. Wrap it and re-validate on
-  read. See [the pattern](/inference/judge/caching/#reject-a-stale-entry).
+  read. See [the pattern](/moose-inference/judge/caching/#reject-a-stale-entry).
 </Aside>
 
 ### Write failures never abort a run

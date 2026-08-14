@@ -1,7 +1,7 @@
 // Wording a verdict schema for your own domain, and the runtime hole to guard.
 // Runs with no API key: MockProvider stands in for a real provider.
 
-import { MockProvider, VERDICT_SCHEMA, judge, runEnsemble } from "@hawkeyexl/inference";
+import { MockProvider, VERDICT_SCHEMA, judge, runEnsemble } from "moose-inference";
 
 // Start from the canonical schema and change only $id, title, and descriptions.
 // Descriptions are prompt surface: they reach the model and steer it.

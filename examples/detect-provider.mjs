@@ -6,7 +6,7 @@ import {
   InferenceError,
   detectProvider,
   makeProvider,
-} from "@hawkeyexl/inference";
+} from "moose-inference";
 
 // Priority order, highest first. `mock` is deliberately absent: it answers {} unless
 // scripted, which would sail through as a real result.

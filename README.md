@@ -1,4 +1,4 @@
-# @hawkeyexl/inference
+# moose-inference
 
 Shared LLM inference layer for the docs-as-tests toolchain: schema-constrained completion across
 Anthropic, OpenAI-compatible, Claude CLI, and in-process local (llama.cpp) providers, with result
@@ -9,19 +9,19 @@ Extracted from three projects that had each grown their own copy —
 [agentevals](https://github.com/hawkeyexl/agentevals) — so a provider fix lands once instead of
 three times.
 
-**📖 [Documentation](https://hawkeyexl.github.io/inference/)**
+**📖 [Documentation](https://hawkeyexl.github.io/moose-inference/)**
 
 ## Install
 
 ```bash
-npm install @hawkeyexl/inference
+npm install moose-inference
 ```
 
 Requires Node 24+. Three runtime dependencies, plus one optional peer dependency for local models.
 
 **ESM only.** The `exports` map has no `require` condition, so
-`require("@hawkeyexl/inference")` fails with `ERR_PACKAGE_PATH_NOT_EXPORTED`. From CommonJS, use
-`await import("@hawkeyexl/inference")`.
+`require("moose-inference")` fails with `ERR_PACKAGE_PATH_NOT_EXPORTED`. From CommonJS, use
+`await import("moose-inference")`.
 
 ## What it does
 
@@ -47,7 +47,7 @@ Two layers, one entry point:
 No API key required — `MockProvider` is exported for exactly this.
 
 ```ts
-import { MockProvider, completeValidatedJSON } from "@hawkeyexl/inference";
+import { MockProvider, completeValidatedJSON } from "moose-inference";
 
 const run = await completeValidatedJSON({
   provider: new MockProvider([{ json: { summary: "Covers authentication." } }]),
@@ -92,18 +92,18 @@ Omit `provider` and the highest-priority one this machine can actually use is de
 
 Usage reporting is the column that decides whether cost accounting works: a provider that reports no
 tokens makes a budget gate inert. See
-[Choose a provider](https://hawkeyexl.github.io/inference/get-started/choose-a-provider/).
+[Choose a provider](https://hawkeyexl.github.io/moose-inference/get-started/choose-a-provider/).
 
 ## Documentation
 
 | Track | What it covers |
 |---|---|
-| [Get started](https://hawkeyexl.github.io/inference/get-started/) | Install, one validated call with no key, choosing a provider |
-| [Judge & consensus](https://hawkeyexl.github.io/inference/judge/) | Ensembles, consensus math, confidence zones, caching, budgets |
-| [Structured extraction](https://hawkeyexl.github.io/inference/extract/) | One schema-constrained call, honest failures, the subprocess seam |
-| [Run models locally](https://hawkeyexl.github.io/inference/local/) | GGUF weights in-process, model selection, managing weights on disk |
-| [Keep it working](https://hawkeyexl.github.io/inference/keep-it-working/testing/) | Testing without a network, upgrading without losing a cache |
-| [Reference](https://hawkeyexl.github.io/inference/reference/providers/) | Full signatures for every export |
+| [Get started](https://hawkeyexl.github.io/moose-inference/get-started/) | Install, one validated call with no key, choosing a provider |
+| [Judge & consensus](https://hawkeyexl.github.io/moose-inference/judge/) | Ensembles, consensus math, confidence zones, caching, budgets |
+| [Structured extraction](https://hawkeyexl.github.io/moose-inference/extract/) | One schema-constrained call, honest failures, the subprocess seam |
+| [Run models locally](https://hawkeyexl.github.io/moose-inference/local/) | GGUF weights in-process, model selection, managing weights on disk |
+| [Keep it working](https://hawkeyexl.github.io/moose-inference/keep-it-working/testing/) | Testing without a network, upgrading without losing a cache |
+| [Reference](https://hawkeyexl.github.io/moose-inference/reference/providers/) | Full signatures for every export |
 
 Who the docs serve and why each page exists lives in
 [docs/content-strategy/](docs/content-strategy).

@@ -1,9 +1,9 @@
 {
-  "name": "inference-docs",
+  "name": "moose-inference-docs",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Documentation site for @hawkeyexl/inference. Private workspace; never published.",
+  "description": "Documentation site for moose-inference. Private workspace; never published.",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
