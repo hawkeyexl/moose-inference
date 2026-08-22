@@ -188,7 +188,7 @@ export class LlamaCppProvider implements InferenceProvider {
             ` — raise llamaCpp.maxTokens, or shorten the prompt if the context is full.`,
         );
       }
-      return { json: extractJson(result.text), usage: result.usage };
+      return { json: extractJson(restoreOpenBrace(result.text)), usage: result.usage };
     } finally {
       await session.dispose().catch(() => undefined);
     }
@@ -230,6 +230,45 @@ function systemPromptFor(req: CompleteJSONRequest): string {
   return `${req.system}\n\nRespond with ONLY a JSON object conforming to this JSON Schema:\n${JSON.stringify(
     req.schema,
   )}`;
+}
+
+/**
+ * Put back the `{` that grammar-constrained generation leaves off.
+ *
+ * node-llama-cpp builds a GBNF grammar from the request schema and the grammar
+ * accounts for the opening brace itself, so `result.text` can begin at the
+ * first key — `"match": "pass", ...}` rather than `{"match": ...}`. Observed
+ * from Qwen3.5-4B-UD-Q4_K_XL on node-llama-cpp 3.20.0.
+ *
+ * Left alone, that reaches `extractJson`, fails `JSON.parse`, and hits the
+ * first-`{`-to-last-`}` fallback — which is at best an opaque error and at
+ * worst a wrong object. When the payload holds an array the fallback latches
+ * onto the first *element's* brace and produces `{...},{...}]}`, surfacing as
+ * `Unexpected non-whitespace character after JSON at position 100`. A caller
+ * cannot act on that.
+ *
+ * The repair is deliberately narrow: only when the text does not already parse
+ * on its own, and only when adding the brace makes it parse. A response that
+ * was already well-formed is returned untouched, so this cannot turn a working
+ * reply into `{{...}`, and text that is broken some other way is handed to
+ * `extractJson` exactly as before.
+ */
+export function restoreOpenBrace(text: string): string {
+  const trimmed = text.trim();
+  if (trimmed.startsWith("{")) return text;
+  try {
+    JSON.parse(trimmed);
+    return text;
+  } catch {
+    /* Not valid on its own — try the brace below. */
+  }
+  const repaired = `{${trimmed}`;
+  try {
+    JSON.parse(repaired);
+    return repaired;
+  } catch {
+    return text;
+  }
 }
 
 /** Cached so repeated provider construction imports the native module once. */

@@ -67,6 +67,43 @@ live("live llama-cpp provider", () => {
     expect(consensus.runs[0]?.usage?.outputTokens).toBeGreaterThan(0);
   }, TIMEOUT);
 
+  // The shape that hid a real defect for a whole release. Grammar-constrained
+  // generation can return `result.text` without its opening `{`, and with an
+  // array in the payload the old brace-slicing fallback latched onto the first
+  // *element's* brace instead — so `completeJSON` failed with
+  // "Unexpected non-whitespace character after JSON at position 100" on every
+  // call. Every unit fixture fed text that already had the brace, so only real
+  // weights could show it. Consumers use exactly this shape: docmeta's `fill`
+  // asks for an array of proposals.
+  it("returns a schema-valid object whose payload is an array", async () => {
+    const provider = await makeProviderAsync({
+      provider: "llama-cpp",
+      model: "fast",
+    });
+    const result = await provider.completeJSON({
+      system: "Extract every animal the text mentions.",
+      user: "The cat sat on the mat. A dog watched.",
+      schema: {
+        type: "object",
+        required: ["animals"],
+        properties: {
+          animals: {
+            type: "array",
+            items: {
+              type: "object",
+              required: ["name"],
+              properties: { name: { type: "string" } },
+            },
+          },
+        },
+      },
+      temperature: 0,
+    });
+    const json = result.json as { animals?: { name?: string }[] };
+    expect(Array.isArray(json.animals)).toBe(true);
+    expect(json.animals?.length).toBeGreaterThan(0);
+  }, TIMEOUT);
+
   it("runs a 3-run ensemble that costs nothing", async () => {
     const provider = await makeProviderAsync({
       provider: "llama-cpp",
