@@ -336,6 +336,72 @@ describe("failure handling", () => {
     );
   });
 
+  // node-llama-cpp generates under a GBNF grammar built from the schema, and
+  // the grammar accounts for the opening `{` itself — so `result.text` comes
+  // back starting at the first key, with no `{` in front of it. Every fixture
+  // in this file predates that and feeds text *with* the brace, which is why
+  // nothing here caught it while `--local` failed on every real run.
+  //
+  // Both strings below are real `result.text` values captured from
+  // Qwen3.5-4B-UD-Q4_K_XL via node-llama-cpp 3.20.0.
+  it("restores the opening brace the grammar omits", async () => {
+    const { runtime } = fakeRuntime(['"match": "pass",\n"confidence": 0.9\n}']);
+    const run = await completeValidatedJSON({
+      provider: new LlamaCppProvider("gemma-4-e4b", { runtime }),
+      system: REQUEST.system,
+      user: REQUEST.user,
+      schema: REQUEST.schema,
+    });
+    expect(run.error).toBeUndefined();
+    expect(run.result).toEqual({ match: "pass", confidence: 0.9 });
+  });
+
+  it("restores the opening brace when the payload holds an array", async () => {
+    // The shape that made this a corruption bug rather than a parse error.
+    // Without the leading `{`, extractJson falls back to first-`{`-to-last-`}`
+    // — which latches onto the first *array element* and yields
+    // `{...},{...}]}`, so the failure surfaced as an opaque
+    // "Unexpected non-whitespace character after JSON at position 100".
+    const text =
+      '"items": [\n  {"match": "pass", "confidence": 0.9},\n' +
+      '  {"match": "fail", "confidence": 0.2}\n]\n}';
+    const schema = {
+      type: "object",
+      properties: {
+        items: { type: "array", items: { type: "object" } },
+      },
+      required: ["items"],
+    } as unknown as Record<string, unknown>;
+    const { runtime } = fakeRuntime([text]);
+    const run = await completeValidatedJSON({
+      provider: new LlamaCppProvider("gemma-4-e4b", { runtime }),
+      system: REQUEST.system,
+      user: REQUEST.user,
+      schema,
+    });
+    expect(run.error).toBeUndefined();
+    expect(run.result).toEqual({
+      items: [
+        { match: "pass", confidence: 0.9 },
+        { match: "fail", confidence: 0.2 },
+      ],
+    });
+  });
+
+  it("leaves a well-formed object alone", async () => {
+    // The repair must be a no-op when the brace is present, or it would turn
+    // every already-working response into `{{...}`.
+    const { runtime } = fakeRuntime(['{"match":"fail","confidence":0.1}']);
+    const run = await completeValidatedJSON({
+      provider: new LlamaCppProvider("gemma-4-e4b", { runtime }),
+      system: REQUEST.system,
+      user: REQUEST.user,
+      schema: REQUEST.schema,
+    });
+    expect(run.error).toBeUndefined();
+    expect(run.result).toEqual({ match: "fail", confidence: 0.1 });
+  });
+
   it("does not mistake a normal stop for truncation", async () => {
     const { runtime } = fakeRuntime();
     await expect(
